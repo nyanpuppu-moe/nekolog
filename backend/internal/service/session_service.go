@@ -76,7 +76,7 @@ func comparePassword(password, encoded string) bool {
 	return subtle.ConstantTimeCompare(hash, expectedHash) == 1
 }
 
-func (s *SessionService) Register(req *dto.SessionRegisterRequest) error {
+func (s *SessionService) Register(req dto.SessionRegisterRequest) error {
 	reservedNames := map[string]bool{
 		"login":    true,
 		"logout":   true,
@@ -105,7 +105,7 @@ func (s *SessionService) Register(req *dto.SessionRegisterRequest) error {
 	return s.userRepo.Create(user)
 }
 
-func (s *SessionService) Login(req *dto.SessionLoginRequest) (*model.User, error) {
+func (s *SessionService) Login(req dto.SessionLoginRequest) (*model.User, error) {
 	user, err := s.userRepo.FindByName(req.Name)
 
 	if err != nil {

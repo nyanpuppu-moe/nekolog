@@ -17,11 +17,11 @@ func NewContentStorage(storagePath string) *ContentStorage {
 	}
 }
 
-func (s *ContentStorage) Create(article *model.Article, content string) error {
+func (s *ContentStorage) Create(authorID model.UserID, title string, content string) error {
 	fullPath := filepath.Join(
 		s.storagePath,
-		toStringUserID(article.AuthorID),
-		article.Title,
+		toStringUserID(authorID),
+		title,
 	)
 
 	if err := os.MkdirAll(filepath.Dir(fullPath), 0755); err != nil {

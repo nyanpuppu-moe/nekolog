@@ -25,7 +25,7 @@ func (h *SessionHandler) Register(c *gin.Context) {
 		return
 	}
 
-	err := h.sessionService.Register(&req)
+	err := h.sessionService.Register(req)
 	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{"error": "Faild to register user"})
 		return
@@ -41,7 +41,7 @@ func (h *SessionHandler) Login(c *gin.Context) {
 		return
 	}
 
-	user, err := h.sessionService.Login(&req)
+	user, err := h.sessionService.Login(req)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return

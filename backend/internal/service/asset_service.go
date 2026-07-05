@@ -30,10 +30,9 @@ func (s *AssetService) Get(id model.AssetID) (*model.Asset, error) {
 	return asset, nil
 }
 
-func (s *AssetService) Post(user *model.User, data []byte, req dto.AssetPostRequest) error {
+func (s *AssetService) Post(userID model.UserID, data []byte, req dto.AssetPostRequest) error {
 	newAsset := &model.Asset{
-		AuthorID: user.ID,
-		Author:   *user,
+		AuthorID: userID,
 		Filename: req.Filename,
 	}
 

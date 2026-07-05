@@ -50,7 +50,7 @@ func main() {
 		articleRepository,
 		userRepository,
 	)
-	articleHandler := handler.NewArticleHandler(articleService)
+	articleHandler := handler.NewArticleHandler(articleService, userService)
 
 	assetService := service.NewAssetService(
 		assetRepository,

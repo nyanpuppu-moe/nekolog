@@ -35,15 +35,14 @@ func (s *ArticleService) Get(username string, title string) (*model.Article, err
 	return s.articleRepo.FindByAuthorIDAndTitle(user.ID, title)
 }
 
-func (s *ArticleService) Post(user *model.User, req dto.ArticlePostRequest) error {
-	_, err := s.articleRepo.FindByAuthorIDAndTitle(user.ID, req.Title)
+func (s *ArticleService) Post(userID model.UserID, req dto.ArticlePostRequest) error {
+	_, err := s.articleRepo.FindByAuthorIDAndTitle(userID, req.Title)
 	if err == nil {
 		return errors.New("Already same title article")
 	}
 
 	newArticle := &model.Article{
-		AuthorID: user.ID,
-		Author:   *user,
+		AuthorID: userID,
 		Title:    req.Title,
 	}
 
@@ -54,8 +53,8 @@ func (s *ArticleService) Post(user *model.User, req dto.ArticlePostRequest) erro
 	return nil
 }
 
-func (s *ArticleService) Patch(user *model.User, title string, req dto.ArticlePatchRequest) error {
-	currentArticle, err := s.articleRepo.FindByAuthorIDAndTitle(user.ID, title)
+func (s *ArticleService) Patch(userID model.UserID, title string, req dto.ArticlePatchRequest) error {
+	currentArticle, err := s.articleRepo.FindByAuthorIDAndTitle(userID, title)
 	if err != nil {
 		return err
 	}
@@ -66,6 +65,6 @@ func (s *ArticleService) Patch(user *model.User, title string, req dto.ArticlePa
 	return s.articleRepo.Update(currentArticle.ID, updates)
 }
 
-func (s *ArticleService) Delete(user *model.User, title string) error {
-	return s.articleRepo.Delete(user.ID, title)
+func (s *ArticleService) Delete(userID model.UserID, title string) error {
+	return s.articleRepo.Delete(userID, title)
 }

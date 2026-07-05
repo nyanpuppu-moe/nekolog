@@ -23,7 +23,7 @@ func NewAssetRepository(
 }
 
 func (r *AssetRepository) Create(asset *model.Asset, data []byte) error {
-	err := r.storage.Create(asset, data)
+	err := r.storage.Create(asset.AuthorID, asset.ID, data)
 	if err != nil {
 		return err
 	}

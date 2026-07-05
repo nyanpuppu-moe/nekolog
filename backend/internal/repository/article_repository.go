@@ -21,7 +21,7 @@ func NewArticleRepository(
 }
 
 func (r *ArticleRepository) Create(article *model.Article, content string) error {
-	if err := r.contentStorage.Create(article, content); err != nil {
+	if err := r.contentStorage.Create(article.AuthorID, article.Title, content); err != nil {
 		return err
 	}
 

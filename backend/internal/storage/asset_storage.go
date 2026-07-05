@@ -27,11 +27,11 @@ func NewAssetStorage(storagePath string) *AssetStorage {
 	}
 }
 
-func (s *AssetStorage) Create(asset *model.Asset, data []byte) error {
+func (s *AssetStorage) Create(authorID model.UserID, assetID model.AssetID, data []byte) error {
 	fullPath := filepath.Join(
 		s.storagePath,
-		toStringUserID(asset.AuthorID),
-		toStringAssetID(asset.ID),
+		toStringUserID(authorID),
+		toStringAssetID(assetID),
 	)
 
 	if err := os.MkdirAll(filepath.Dir(fullPath), 0755); err != nil {

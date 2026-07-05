@@ -14,7 +14,6 @@ import (
 
 type AssetHandler struct {
 	assetService *service.AssetService
-	userService  *service.UserService
 }
 
 func NewAssetHandler(assetService *service.AssetService) *AssetHandler {
@@ -59,8 +58,6 @@ func (h *AssetHandler) Post(c *gin.Context) {
 		return
 	}
 
-	user, err := h.userService.GetByID(userID)
-
 	var req dto.AssetPostRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request data"})
@@ -86,7 +83,7 @@ func (h *AssetHandler) Post(c *gin.Context) {
 		return
 	}
 
-	if err := h.assetService.Post(user, data, req); err != nil {
+	if err := h.assetService.Post(userID, data, req); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

@@ -15,8 +15,8 @@ type ArticleHandler struct {
 	userService    *service.UserService
 }
 
-func NewArticleHandler(s *service.ArticleService) *ArticleHandler {
-	return &ArticleHandler{articleService: s}
+func NewArticleHandler(s *service.ArticleService, us *service.UserService) *ArticleHandler {
+	return &ArticleHandler{articleService: s, userService: us}
 }
 
 func (h *ArticleHandler) Get(c *gin.Context) {
@@ -48,19 +48,13 @@ func (h *ArticleHandler) Post(c *gin.Context) {
 		return
 	}
 
-	user, err := h.userService.GetByID(userID)
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user"})
-		return
-	}
-
 	var req dto.ArticlePostRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request data"})
 		return
 	}
 
-	if err = h.articleService.Post(user, req); err != nil {
+	if err := h.articleService.Post(userID, req); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -103,7 +97,7 @@ func (h *ArticleHandler) Patch(c *gin.Context) {
 		return
 	}
 
-	if err = h.articleService.Patch(user, title, req); err != nil {
+	if err = h.articleService.Patch(userID, title, req); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -140,7 +134,7 @@ func (h *ArticleHandler) Delete(c *gin.Context) {
 		return
 	}
 
-	if err = h.articleService.Delete(user, title); err != nil {
+	if err = h.articleService.Delete(userID, title); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
