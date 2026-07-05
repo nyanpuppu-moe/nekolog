@@ -1,0 +1,13 @@
+env:
+  mode: "development"
+
+database:
+  path: "runtime/main.db"
+
+storage:
+  assets-path: "runtime/storage/assets"
+
+server:
+  port: "8080"
+  session-store:
+    private-key: ""
