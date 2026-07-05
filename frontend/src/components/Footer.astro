@@ -1,0 +1,55 @@
+---
+"nekolog.moe";
+---
+
+<footer>
+  <div class="split">
+    <div class="holder">
+      <p>2026 김운영 (Operator)</p>
+    </div>
+    <div class="holder">
+      <a href=""><p>소개</p></a>
+      <a href=""><p>방명록</p></a>
+      <a href=""><p>피드</p></a>
+    </div>
+  </div>
+  <hr />
+  <a href="https://github.com/nyanpuppu-moe/nekolog"
+    ><p>Made with 💖 by nekolog</p></a
+  >
+</footer>
+
+<style>
+  footer {
+    background: var(--crepe-color-surface);
+    color: var(--crepe-color-on-background);
+    padding: 2rem;
+    font-size: 1rem;
+  }
+  hr {
+    border: none;
+    background-clip: content-box;
+    height: 1px;
+    background-color: color-mix(
+      in srgb,
+      var(--crepe-color-outline),
+      transparent 80%
+    );
+  }
+  .split {
+    display: flex;
+    justify-content: space-between;
+  }
+  .holder {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+  p {
+    margin: 0;
+    padding: 0;
+  }
+  a {
+    color: var(--crepe-color-primary);
+  }
+</style>

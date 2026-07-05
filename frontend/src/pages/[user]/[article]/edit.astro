@@ -1,0 +1,11 @@
+---
+const { articleId } = Astro.params;
+
+import Layout from "../../../layouts/Layout.astro";
+import { MilkdownEditorWrapper } from "../../../components/ContentEditor";
+---
+
+<Layout lang={"ko"} title={"테스트"} description={"ㅁㄴㅇㄹ"} ogType="article">
+  <link rel="canonical" href={Astro.url.href} slot="head" />
+  <MilkdownEditorWrapper client:only="react" />
+</Layout>

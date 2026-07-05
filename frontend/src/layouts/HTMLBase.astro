@@ -1,0 +1,70 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  ogType?: string;
+  lang: string;
+  disableCanonicalLink?: boolean;
+}
+import { mergeClassName } from "@qwreey-js/ts-util";
+import "../styles/global.scss";
+import "../styles/markdown.scss";
+import Theme from "@/components/Theme.astro";
+
+import { ClientRouter } from "astro:transitions";
+
+const ThemeCookie = Astro.cookies.get("theme");
+const HtmlClass = mergeClassName(ThemeCookie?.value);
+---
+
+<!doctype html>
+<html lang={Astro.props.lang} class={HtmlClass}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Noto+Sans+KR:wght@400;700&family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+SC:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <style>
+      @layer theme, core, utility, print;
+    </style>
+    <Theme />
+
+    <!-- Title and description -->
+    <title>{Astro.props.title}</title>
+    <meta name="description" content={Astro.props.description} />
+    {
+      Astro.props.disableCanonicalLink && (
+        <link rel="canonical" href={Astro.url.pathname} />
+      )
+    }
+
+    <!-- Og props -->
+    <meta property="og:title" content={Astro.props.title} />
+    <meta property="og:description" content={Astro.props.description} />
+    <meta property="og:image" content={Astro.props.ogImage} />
+    <meta property="og:type" content={Astro.props.ogType} />
+    <meta property="og:url" content={Astro.url.href} />
+
+    <ClientRouter />
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

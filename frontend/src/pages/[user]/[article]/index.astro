@@ -1,0 +1,60 @@
+---
+const { user, article } = Astro.params;
+import Layout from "../../../layouts/Layout.astro";
+import { compileAndSanitizeMarkdown } from "../../../shared/content-renderer";
+
+const test = `
+# Using Crepe Editor
+
+Crepe is a powerful, feature-rich Markdown editor built on top of Milkdown. It provides a complete editing experience with a beautiful UI and extensive customization options.
+
+## Why Choose Crepe?
+
+***
+
+* 🚀 **Ready to Use**: Works out of the box with sensible defaults
+* 🎨 **Beautiful UI**: Modern design with multiple theme options
+* 🔧 **Highly Customizable**: Extensive configuration options
+* 📦 **Feature Complete**: Includes all essential Markdown editing features
+* 🛠️ **Extensible**: Built on Milkdown's plugin system
+
+\`\`\`latex
+\\mu asdfq
+\`\`\`
+
+\`\`\`typescript
+default export function name(asdf) {
+  return this;
+}
+\`\`\`
+
+| asdf | asdf | asdf |
+| ---- | ---- | ---- |
+| asdf | asdf | asdf |
+| asdf | asdf | asdf |
+
+* [ ] asdf
+* [x] asdf
+* [ ] asdf
+* asdf
+- asdf
+2. asdf
+4. asdf
+6. asdf
+
+<kbd>ㅁㄴㅇㄹ</kbd>
+
+> wow
+
+[asdfasdf](https://qwreey.moe)
+`;
+
+const htmlContent = await compileAndSanitizeMarkdown(test);
+---
+
+<Layout lang={"ko"} title={"테스트"} description={"ㅁㄴㅇㄹ"} ogType="article">
+  <link rel="canonical" href={Astro.url.href} slot="head" />
+  <main class="milkdown view">
+    <article class="ProseMirror" set:html={htmlContent} />
+  </main>
+</Layout>

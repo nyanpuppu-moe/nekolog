@@ -1,0 +1,5 @@
+---
+const htmlContent = Astro.locals.blogContext?.contentHtml ?? "";
+---
+
+<article class="ProseMirror" set:html={htmlContent} />

@@ -1,0 +1,11 @@
+& { /* :root */
+  --crepe-font-title:
+    "Noto Sans", "Noto Sans KR", "Noto Sans JP", "Noto Sans SC", "Noto Sans TC",
+    sans-serif;
+  --crepe-font-default:
+    "Noto Sans", "Noto Sans KR", "Noto Sans JP", "Noto Sans SC", "Noto Sans TC",
+    sans-serif;
+  --crepe-font-code:
+    "JetBrains Mono", monospace, "Noto Sans", "Noto Sans KR", "Noto Sans JP",
+    "Noto Sans SC", "Noto Sans TC", sans-serif;
+}

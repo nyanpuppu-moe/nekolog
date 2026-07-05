@@ -1,0 +1,251 @@
+@use "sass:meta";
+@import url("@milkdown/crepe/theme/common/style.css") layer(theme);
+
+// Fix readonly view mode diffs
+@mixin md-view-reduce-inline-gaps {
+  // Reduce inline block gaps
+  .ProseMirror {
+    display: flex;
+    flex-direction: column;
+  }
+  blockquote {
+    line-height: 0;
+  }
+}
+@mixin md-view-list-item {
+  // Render list item custom marker
+  list-style-position: inside;
+  ul,
+  ol {
+    display: flex;
+    flex-direction: column;
+    > li {
+      position: relative;
+      padding-left: calc(0.625rem + 1.5rem); // 10px + 24px
+      padding-top: 0.25rem; // 4px
+      padding-bottom: 0.25rem; // 4px
+    }
+    > li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      top: 0.25rem; // 4px;
+      color: var(--crepe-color-outline);
+      width: 1.5rem; // 24px;
+      display: inline-block;
+      text-align: center;
+    }
+    > li::marker {
+      content: "";
+      display: none;
+    }
+  }
+  ul > li::before {
+    color: transparent;
+    background-color: var(--crepe-color-outline);
+    mask-image: url("/public/bullet.svg");
+    -webkit-mask-image: url("/public/bullet.svg");
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+  }
+  ol > li::before,
+  ol[type="1"] > li::before {
+    // list-item uses start="*"
+    content: counter(list-item, decimal) ".";
+  }
+  ol[type="a"] > li::before {
+    content: counter(list-item, lower-alpha) ".";
+  }
+  ol[type="A"] > li::before {
+    content: counter(list-item, upper-alpha) ".";
+  }
+  ol[type="i"] > li::before {
+    content: counter(list-item, lower-roman) ".";
+  }
+  ol[type="I"] > li::before {
+    content: counter(list-item, upper-roman) ".";
+  }
+}
+@mixin md-view-task-list-item {
+  // Change input type=checkbox style
+  .task-list-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem; // 10px
+
+    &::marker {
+      content: "";
+      display: none;
+    }
+    &::before {
+      display: none;
+    }
+    input[type="checkbox"] {
+      position: absolute;
+      left: 0;
+      top: 0.25rem; // 4px
+      -webkit-appearance: none;
+      appearance: none;
+      background-color: var(--crepe-color-outline);
+      mask-image: url("/public/checkbox.svg");
+      -webkit-mask-image: url("/public/checkbox.svg");
+      width: 1.5rem; // 24px
+      height: 1.5rem; // 24px
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+    }
+    input[type="checkbox"]:checked {
+      mask-image: url("/public/checkbox-checked.svg");
+      -webkit-mask-image: url("/public/checkbox-checked.svg");
+    }
+  }
+}
+@mixin md-view-table {
+  // Change table style to match
+  table {
+    line-height: 1;
+    td,
+    th {
+      border: 1px solid
+        color-mix(in srgb, var(--crepe-color-outline), transparent 80%);
+      padding: 0.5rem 1rem; // 8px 16px
+      &:not([align]) {
+        text-align: left;
+      }
+    }
+  }
+}
+@mixin md-view-font-sizes {
+  // Fix font sizes (editor use px. change to rem)
+  li,
+  p,
+  td,
+  th {
+    font-size: 1rem; // 16px
+    @media (max-width: 767px) {
+      font-size: 0.875rem; // 14px
+    }
+  }
+  code {
+    font-size: 0.875rem; // 14px
+  }
+}
+@mixin md-view-htag-sizes {
+  // Title sizes
+  h1 {
+    font-size: 2.625rem; // 42px
+    line-height: 3.125rem; // 50px
+    margin-top: 2rem; // 32px
+  }
+  h2 {
+    font-size: 2.25rem; // 36px
+    line-height: 2.75rem; // 44px
+    margin-top: 1.75rem; // 28px
+  }
+  h3 {
+    font-size: 2rem; // 32px
+    line-height: 2.5rem; // 40px
+    margin-top: 1.5rem; // 24px
+  }
+  h4 {
+    font-size: 1.75rem; // 28px
+    line-height: 2.25rem; // 36px
+    margin-top: 1.25rem; // 20px
+  }
+  h5 {
+    font-size: 1.5rem; // 24px
+    line-height: 2rem; // 32px
+    margin-top: 1rem; // 16px
+  }
+  h6 {
+    font-size: 1.125rem; // 18px
+    font-weight: 700;
+    line-height: 1.75rem; // 28px
+    margin-top: 1rem; // 16px
+  }
+  @media (max-width: 767px) {
+    h1 {
+      font-size: 2rem; // 32px
+      line-height: 2.5rem; // 40px
+      margin-top: 1.5rem; // 24px
+    }
+    h2 {
+      font-size: 1.75rem; // 28px
+      line-height: 2.25rem; // 36px
+      margin-top: 1.25rem; // 20px
+    }
+    h3 {
+      font-size: 1.5rem; // 24px
+      line-height: 2rem; // 32px
+      margin-top: 1rem; // 16px
+    }
+    h4 {
+      font-size: 1.25rem; // 20px
+      line-height: 1.75rem; // 28px
+      margin-top: 1rem; // 16px
+    }
+    h5 {
+      font-size: 1.125rem; // 18px
+      line-height: 1.5rem; // 24px
+      margin-top: 0.75rem; // 12px
+    }
+    h6 {
+      font-size: 1rem; // 16px
+      line-height: 1.375rem; // 22px
+      margin-top: 0.75rem; // 12px
+    }
+  }
+}
+@mixin md-view-codeblock {
+  pre {
+    background: transparent;
+  }
+  .hljs {
+    background: var(--crepe-color-surface);
+  }
+}
+@mixin md-view-mode {
+  .view {
+    @include md-view-reduce-inline-gaps;
+    @include md-view-list-item;
+    @include md-view-task-list-item;
+    @include md-view-table;
+    @include md-view-font-sizes;
+    @include md-view-htag-sizes;
+    @include md-view-codeblock;
+  }
+}
+
+// Center content
+@mixin md-content-pos {
+  .milkdown .ProseMirror {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px 60px;
+    @media screen and (max-width: 767px) {
+      padding: 10px 30px;
+    }
+    @media screen and (max-width: 420px) {
+      padding: 10px 18px;
+    }
+  }
+}
+
+@layer utility {
+  @include md-view-mode;
+  @include md-content-pos;
+}
+
+@layer print {
+  @media print {
+  }
+  // 마진이랑 어쩌고저쩌고 다 빼기
+}
