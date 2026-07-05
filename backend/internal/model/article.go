@@ -7,6 +7,5 @@ type Article struct {
 	AuthorID UserID    `gorm:"not null;uniqueIndex:uniq_author_title"`
 	Author   User      `gorm:"constraint:OnDelete:CASCADE;"`
 	Title    string    `gorm:"not null;uniqueIndex:uniq_author_title"`
-	Content  string    `gorm:"not null;type:text"`
 	View     uint      `gorm:"default:0"`
 }

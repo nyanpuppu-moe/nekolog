@@ -16,7 +16,8 @@ type DatabaseConfig struct {
 }
 
 type StorageConfig struct {
-	AssetsPath string `yaml:"assets-path"`
+	AssetsPath   string `yaml:"assets-path"`
+	ContentsPath string `yaml:"contents-path"`
 }
 
 type ServerConfig struct {

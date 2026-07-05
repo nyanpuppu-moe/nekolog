@@ -2,20 +2,29 @@ package repository
 
 import (
 	"nekolog/internal/model"
+	"nekolog/internal/storage"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 type ArticleRepository struct {
-	db *gorm.DB
+	db             *gorm.DB
+	contentStorage *storage.ContentStorage
 }
 
-func NewArticleRepository(db *gorm.DB) *ArticleRepository {
+func NewArticleRepository(
+	db *gorm.DB,
+	contentStorage *storage.ContentStorage,
+) *ArticleRepository {
 	return &ArticleRepository{db: db}
 }
 
-func (r *ArticleRepository) Create(article *model.Article) error {
+func (r *ArticleRepository) Create(article *model.Article, content string) error {
+	if err := r.contentStorage.Create(article, content); err != nil {
+		return err
+	}
+
 	return r.db.
 		Create(article).
 		Error
@@ -49,10 +58,15 @@ func (r *ArticleRepository) Update(id model.ArticleID, updates gin.H) error {
 		Error
 }
 
-func (r *ArticleRepository) Delete(id model.ArticleID) error {
+func (r *ArticleRepository) Delete(authorID model.UserID, title string) error {
+	if err := r.contentStorage.Delete(authorID, title); err != nil {
+		return err
+	}
+
 	return r.db.
 		Delete(&model.Article{
-			ID: id,
+			AuthorID: authorID,
+			Title:    title,
 		}).
 		Error
 }

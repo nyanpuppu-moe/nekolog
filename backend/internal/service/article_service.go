@@ -45,10 +45,9 @@ func (s *ArticleService) Post(user *model.User, req dto.ArticlePostRequest) erro
 		AuthorID: user.ID,
 		Author:   *user,
 		Title:    req.Title,
-		Content:  req.Content,
 	}
 
-	if err := s.articleRepo.Create(newArticle); err != nil {
+	if err := s.articleRepo.Create(newArticle, req.Content); err != nil {
 		return err
 	}
 
@@ -68,10 +67,5 @@ func (s *ArticleService) Patch(user *model.User, title string, req dto.ArticlePa
 }
 
 func (s *ArticleService) Delete(user *model.User, title string) error {
-	article, err := s.articleRepo.FindByAuthorIDAndTitle(user.ID, title)
-	if err != nil {
-		return err
-	}
-
-	return s.articleRepo.Delete(article.ID)
+	return s.articleRepo.Delete(user.ID, title)
 }

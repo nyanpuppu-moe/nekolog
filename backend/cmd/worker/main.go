@@ -10,25 +10,34 @@ import (
 	"nekolog/internal/model"
 	"nekolog/internal/repository"
 	"nekolog/internal/service"
+	"nekolog/internal/storage"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	dbPath := "runtime/local.db"
+	config, err := config.Load()
+	if err != nil {
+		panic(err)
+	}
+
+	dbPath := config.Database.Path
 	db, err := database.Connect(dbPath)
 	if err != nil {
-		log.Fatalf("faild to can not connect sqlite: %v", err)
+		log.Fatalf("Faild to can not connect sqlite: %v", err)
 	}
 
 	err = db.AutoMigrate(&model.User{})
 	if err != nil {
-		log.Fatalf("faild to sqlite migration: %v", err)
+		log.Fatalf("Faild to sqlite migration: %v", err)
 	}
 
-	articleRepository := repository.NewArticleRepository(db)
-	assetRepository := repository.NewAssetRepository(db)
+	assetsStorage := storage.NewAssetStorage(config.Storage.AssetsPath)
+	contentStorage := storage.NewContentStorage(config.Storage.ContentsPath)
+
+	articleRepository := repository.NewArticleRepository(db, contentStorage)
+	assetRepository := repository.NewAssetRepository(db, assetsStorage)
 	userRepository := repository.NewUserRepository(db)
 
 	sessionService := service.NewSessionService(userRepository)
@@ -48,11 +57,6 @@ func main() {
 		userRepository,
 	)
 	assetHandler := handler.NewAssetHandler(assetService)
-
-	config, err := config.Load()
-	if err != nil {
-		panic(err)
-	}
 
 	router := gin.Default()
 

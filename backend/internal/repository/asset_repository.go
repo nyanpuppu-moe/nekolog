@@ -12,8 +12,14 @@ type AssetRepository struct {
 	storage *storage.AssetStorage
 }
 
-func NewAssetRepository(db *gorm.DB) *AssetRepository {
-	return &AssetRepository{db: db}
+func NewAssetRepository(
+	db *gorm.DB,
+	storage *storage.AssetStorage,
+) *AssetRepository {
+	return &AssetRepository{
+		db:      db,
+		storage: storage,
+	}
 }
 
 func (r *AssetRepository) Create(asset *model.Asset, data []byte) error {
