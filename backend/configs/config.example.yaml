@@ -6,6 +6,7 @@ database:
 
 storage:
   assets-path: "runtime/storage/assets"
+  contents-path: "runtime/storage/contents"
 
 server:
   port: "8080"

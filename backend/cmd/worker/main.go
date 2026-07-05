@@ -61,9 +61,11 @@ func main() {
 	router := gin.Default()
 
 	var store sessions.Store
+
 	if config.Environment.Mode == "development" {
 		store = service.InitDevelopmentSessionStore(config.Server.SessionStore.PrivateKey)
 	} else {
+		gin.SetMode(gin.ReleaseMode)
 		store = service.InitSessionStore(config.Server.SessionStore.PrivateKey)
 	}
 
