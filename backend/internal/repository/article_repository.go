@@ -9,15 +9,18 @@ import (
 )
 
 type ArticleRepository struct {
-	db             *gorm.DB
+	dataBase       *gorm.DB
 	contentStorage *storage.ContentStorage
 }
 
 func NewArticleRepository(
-	db *gorm.DB,
+	dataBase *gorm.DB,
 	contentStorage *storage.ContentStorage,
 ) *ArticleRepository {
-	return &ArticleRepository{db: db}
+	return &ArticleRepository{
+		dataBase:       dataBase,
+		contentStorage: contentStorage,
+	}
 }
 
 func (r *ArticleRepository) Create(article *model.Article, content string) error {
@@ -25,7 +28,7 @@ func (r *ArticleRepository) Create(article *model.Article, content string) error
 		return err
 	}
 
-	return r.db.
+	return r.dataBase.
 		Create(article).
 		Error
 }
@@ -33,7 +36,7 @@ func (r *ArticleRepository) Create(article *model.Article, content string) error
 func (r *ArticleRepository) FindByAuthorIDAndTitle(authorID model.UserID, title string) (*model.Article, error) {
 	var article model.Article
 
-	err := r.db.
+	err := r.dataBase.
 		Where(&model.Article{
 			AuthorID: authorID,
 			Title:    title,
@@ -49,7 +52,7 @@ func (r *ArticleRepository) FindByAuthorIDAndTitle(authorID model.UserID, title 
 }
 
 func (r *ArticleRepository) Update(id model.ArticleID, updates gin.H) error {
-	return r.db.
+	return r.dataBase.
 		Model(&model.Article{}).
 		Where(&model.Article{
 			ID: id,
@@ -63,7 +66,7 @@ func (r *ArticleRepository) Delete(authorID model.UserID, title string) error {
 		return err
 	}
 
-	return r.db.
+	return r.dataBase.
 		Delete(&model.Article{
 			AuthorID: authorID,
 			Title:    title,

@@ -8,17 +8,17 @@ import (
 )
 
 type AssetRepository struct {
-	db      *gorm.DB
-	storage *storage.AssetStorage
+	dataBase *gorm.DB
+	storage  *storage.AssetStorage
 }
 
 func NewAssetRepository(
-	db *gorm.DB,
+	dataBase *gorm.DB,
 	storage *storage.AssetStorage,
 ) *AssetRepository {
 	return &AssetRepository{
-		db:      db,
-		storage: storage,
+		dataBase: dataBase,
+		storage:  storage,
 	}
 }
 
@@ -28,7 +28,7 @@ func (r *AssetRepository) Create(asset *model.Asset, data []byte) error {
 		return err
 	}
 
-	return r.db.
+	return r.dataBase.
 		Create(asset).
 		Error
 }
@@ -39,7 +39,7 @@ func (r *AssetRepository) Delete(userID model.UserID, assetID model.AssetID) err
 		return err
 	}
 
-	return r.db.
+	return r.dataBase.
 		Delete(&model.Asset{
 			ID: assetID,
 		}).
@@ -49,7 +49,7 @@ func (r *AssetRepository) Delete(userID model.UserID, assetID model.AssetID) err
 func (r *AssetRepository) FindByID(id model.AssetID) (*model.Asset, error) {
 	var asset model.Asset
 
-	err := r.db.
+	err := r.dataBase.
 		Where(&model.Asset{
 			ID: id,
 		}).

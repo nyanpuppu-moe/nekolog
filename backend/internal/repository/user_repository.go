@@ -7,15 +7,17 @@ import (
 )
 
 type UserRepository struct {
-	db *gorm.DB
+	dataBase *gorm.DB
 }
 
-func NewUserRepository(db *gorm.DB) *UserRepository {
-	return &UserRepository{db: db}
+func NewUserRepository(dataBase *gorm.DB) *UserRepository {
+	return &UserRepository{
+		dataBase: dataBase,
+	}
 }
 
 func (r *UserRepository) Create(user *model.User) error {
-	return r.db.
+	return r.dataBase.
 		Create(user).
 		Error
 }
@@ -23,7 +25,7 @@ func (r *UserRepository) Create(user *model.User) error {
 func (r *UserRepository) FindByID(id model.UserID) (*model.User, error) {
 	var user model.User
 
-	err := r.db.
+	err := r.dataBase.
 		Where(&model.User{
 			ID: id,
 		}).
@@ -40,7 +42,7 @@ func (r *UserRepository) FindByID(id model.UserID) (*model.User, error) {
 func (r *UserRepository) FindByName(name string) (*model.User, error) {
 	var user model.User
 
-	err := r.db.
+	err := r.dataBase.
 		Where(&model.User{
 			Name: name,
 		}).
