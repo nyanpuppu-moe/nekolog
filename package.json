@@ -1,0 +1,16 @@
+{
+  "name": "nekolog",
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "contributors": [
+    { "name": "Qwreey", "email": "me@qwreey.moe", "url": "https://github.com/qwreey" },
+    { "name": "Yaeju", "email": "gimleni593@gmail.com", "url": "https://github.com/yaeju1205" }
+  ],
+  "homepage": "https://github.com/nyanpuppu-moe/nekolog#readme",
+  "bugs": {
+    "url": "https://github.com/nyanpuppu-moe/nekolog/issues"
+  },
+  "keywords": ["astro", "blog", "markdown", "milkdown", "go"]
+}

@@ -14,7 +14,7 @@
       background-color 0.2s ease;
     padding: 4px 10px;
     font-size: 0.85rem;
-    background-color: #2563eb; /* 일반적인 파란색 */
+    background-color: #2563eb; /* Common blue */
     color: #ffffff;
     border: none;
     border-radius: 4px;
@@ -48,62 +48,62 @@
   }
 </style>
 
-<!-- 실동작 스크립트 영역 -->
+<!-- Runtime behavior script -->
 <script>
   function initCodeCopyButtons() {
     const preElements = document.querySelectorAll(".view pre");
 
-    preElements.forEach((pre) => {
+    preElements.forEach((node) => {
+      const pre = node as HTMLPreElement;
       if (pre.querySelector(".code-copy-btn")) return;
 
-      // 1. 접근성을 챙긴 복사 버튼 엘리먼트 생성
+      // Create the copy button element with accessibility support
       const button = document.createElement("button");
       button.type = "button";
       button.className = "code-copy-btn";
-      button.setAttribute("aria-label", "코드 복사"); // 스크린 리더가 이 버튼의 목적을 알게 해줘
+      button.setAttribute("aria-label", "코드 복사"); // Let screen readers know the purpose of this button
       button.innerText = "복사";
 
-      // 2. 복사 성공 메시지를 스크린 리더에게 실시간 브리핑해줄 라이브 영역 마련
+      // Set up a live region to announce the copy success message to screen readers
       const liveRegion = document.createElement("span");
       liveRegion.className = "sr-only";
-      liveRegion.setAttribute("aria-live", "polite"); // 값이 바뀌면 스크린 리더가 즉시 소리 내어 읽음
+      liveRegion.setAttribute("aria-live", "polite"); // Screen readers read out changes immediately
       pre.appendChild(liveRegion);
 
-      // 3. 복사 이벤트 바인딩
+      // Bind the copy event
       button.addEventListener("click", async () => {
-        // pre 내부에 code 태그가 있으면 그 텍스트를 가져오고, 없으면 pre 전체 텍스트 활용
+        // Use the code tag's text if present inside pre, otherwise use the full pre text
         const codeElement = pre.querySelector("code");
         const textToCopy = codeElement ? codeElement.innerText : pre.innerText;
 
         try {
-          // 클립보드로 복사 직행!
+          // Copy straight to the clipboard
           await navigator.clipboard.writeText(textToCopy);
 
-          // 성공 시 UI 및 ARIA 상태 변경
+          // Update the UI and ARIA state on success
           button.innerText = "완료!";
           button.setAttribute("aria-label", "복사 완료");
-          liveRegion.innerText = "코드가 클립보드에 복사되었어.";
+          liveRegion.innerText = "코드가 클립보드에 복사되었어요.";
 
-          // 2초 뒤에 다시 원래 상태로 롤백해두기
+          // Roll back to the original state after 2 seconds
           setTimeout(() => {
             button.innerText = "복사";
             button.setAttribute("aria-label", "코드 복사");
             liveRegion.innerText = "";
           }, 2000);
         } catch (err) {
-          console.error("복사 실패했다 공주:", err);
-          liveRegion.innerText = "코드 복사에 실패했어.";
+          liveRegion.innerText = "코드 복사에 실패했어요.";
         }
       });
 
-      // pre 태그 안쪽 마지막 자식으로 버튼을 넣어줘
+      // Append the button as the last child inside the pre tag
       pre.appendChild(button);
     });
   }
 
-  // 첫 화면 로드 시 실행!
+  // Run on the initial page load
   initCodeCopyButtons();
 
-  // Astro ClientRouter SPA 모드로 페이지가 교체될 때마다 다시 실행해서 바인딩 처리!
+  // Re-run to rebind whenever the page is swapped in Astro ClientRouter SPA mode
   document.addEventListener("astro:page-load", initCodeCopyButtons);
 </script>
