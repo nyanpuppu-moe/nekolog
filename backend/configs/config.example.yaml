@@ -2,11 +2,11 @@ env:
   mode: "development"
 
 database:
-  path: "runtime/main.db"
+  path: "data/main.db"
 
 storage:
-  assets-path: "runtime/storage/assets"
-  contents-path: "runtime/storage/contents"
+  assets-path: "data/storage/assets"
+  contents-path: "data/storage/contents"
 
 server:
   port: "8080"
