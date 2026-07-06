@@ -1,0 +1,29 @@
+---
+import { t } from "lingui-for-astro/macro";
+
+const CodeSnippetScrollArea = t({
+  id: "code_snippet_scroll_area",
+  message: "Code snippet scroll area",
+});
+---
+
+<!-- Runtime behavior script -->
+<script is:inline define:vars={{ CodeSnippetScrollArea }}>
+  function setupLazyI18n() {
+    const i18nElements = document.querySelectorAll("[data-i18n-key]");
+
+    for (const element of i18nElements) {
+      const attr = element.getAttribute("data-i18n-key");
+
+      if (attr === "code_snippet_scroll_area") {
+        element.ariaLabel = CodeSnippetScrollArea;
+      }
+    }
+  }
+
+  // Run on the initial page load
+  setupLazyI18n();
+
+  // Re-run to rebind whenever the page is swapped in Astro ClientRouter SPA mode
+  document.addEventListener("astro:page-load", setupLazyI18n);
+</script>

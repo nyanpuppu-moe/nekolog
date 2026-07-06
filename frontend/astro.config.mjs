@@ -2,6 +2,8 @@
 import { defineConfig, envField } from "astro/config";
 import node from "@astrojs/node";
 import react from "@astrojs/react";
+import linguiForAstro from "lingui-for-astro/integration";
+import linguiMacro from "unplugin-lingui-macro/vite";
 
 // @ts-ignore We dont need full node types. vite env runs on nodejs
 //            So we can just ignore it
@@ -16,7 +18,7 @@ const devPort = process.env.ASTRO_PORT ? parseInt(process.env.ASTRO_PORT, 10) : 
 // https://astro.build/config
 export default defineConfig({
   output: "server",
-  integrations: [react()],
+  integrations: [react(), linguiForAstro()],
   adapter: node({
     mode: "standalone",
   }),
@@ -28,6 +30,9 @@ export default defineConfig({
         default: "NekoLog",
       }),
     },
+  },
+  vite: {
+    plugins: [linguiMacro()],
   },
   server: {
     host: devHost, 

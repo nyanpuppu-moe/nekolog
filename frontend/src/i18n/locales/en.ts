@@ -1,0 +1,1 @@
+/*eslint-disable*/import type{Messages}from"@lingui/core";export const messages=JSON.parse("{\"code_snippet_scroll_area\":[\"Code snippet scroll area\"]}")as Messages;

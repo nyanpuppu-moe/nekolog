@@ -14,6 +14,7 @@ import { remarkLatexToMath } from "./remark-latex-to-math";
 import { rehypeTrimTaskSpace } from "./rehype-trim-task-space";
 import { remarkReadingTime } from "./remark-reading-time";
 import { rehypeTaskListAria } from "./rehype-task-list-aria";
+import { rehypeMarkAriaKeys } from "./rehype-mark-aria-keys";
 
 export const processor = unified()
   .use(remarkParse) // Parse markdown
@@ -28,6 +29,7 @@ export const processor = unified()
   .use(rehypeKatex) // Render latex
   .use(rehypeHighlight) // Highlight codeblock
   .use(rehypeAccessibleEmojis) // Add aria to emojis
+  .use(rehypeMarkAriaKeys) // Add pre aria locale keys
   .use(rehypeStringify);
 
 export async function compileAndSanitizeMarkdown(

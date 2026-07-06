@@ -8,6 +8,7 @@ import Footer from "@/components/Footer.astro";
 import Main from "@/components/Main.astro";
 import BodyStart from "@/components/BodyStart.astro";
 import CodeCopyButton from "@/components/CodeCopyButton.astro";
+import AriaI18n from "@/components/AriaI18n.astro";
 
 const customComponents = import.meta.glob("/src/custom/*.astro", {
   eager: true,
@@ -22,7 +23,8 @@ const CustomBodyStart = (customComponents["/src/custom/BodyStart.astro"] as any)
 ---
 
 <HTMLBase {...Astro.props}>
-  <CodeCopyButton />
+  <CodeCopyButton client:idle />
+  <AriaI18n client:idle />
   {CustomBodyStart ? <CustomBodyStart /> : <BodyStart />}
   {CustomHeader ? <CustomHeader /> : <Header />}
   {

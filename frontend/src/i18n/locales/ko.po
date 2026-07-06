@@ -1,0 +1,13 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-07-06 03:31+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: ko\n"
+
+#. js-lingui-explicit-id
+#: src/components/AriaI18n.astro
+msgid "code_snippet_scroll_area"
+msgstr "코드 스니펫 스크롤 영역"
