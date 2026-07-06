@@ -15,8 +15,14 @@ type ArticleHandler struct {
 	userService    *service.UserService
 }
 
-func NewArticleHandler(s *service.ArticleService, us *service.UserService) *ArticleHandler {
-	return &ArticleHandler{articleService: s, userService: us}
+func NewArticleHandler(
+	articleService *service.ArticleService,
+	userService *service.UserService,
+) *ArticleHandler {
+	return &ArticleHandler{
+		articleService: articleService,
+		userService:    userService,
+	}
 }
 
 func (h *ArticleHandler) Get(c *gin.Context) {
@@ -25,43 +31,74 @@ func (h *ArticleHandler) Get(c *gin.Context) {
 
 	article, err := h.articleService.Get(username, title)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Not Found article"})
+		c.JSON(
+			http.StatusNotFound,
+			gin.H{
+				"error": "존재하지 않는 아티클입니다",
+			},
+		)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Get article successfully",
-		"article": article,
-	})
+	c.JSON(
+		http.StatusOK,
+		gin.H{
+			"message": "아티클이 조회되었습니다",
+			"article": article,
+		},
+	)
 }
 
 func (h *ArticleHandler) Post(c *gin.Context) {
 	sessionUserID, exists := c.Get("user_id")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Not verified user"})
+		c.JSON(
+			http.StatusUnauthorized,
+			gin.H{
+				"error": "인증되지 않은 유저입니다",
+			},
+		)
 		return
 	}
 
 	userID, ok := sessionUserID.(model.UserID)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user id"})
+		c.JSON(
+			http.StatusUnauthorized,
+			gin.H{
+				"error": "올바르지 않은 유저입니다",
+			},
+		)
 		return
 	}
 
 	var req dto.ArticlePostRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request data"})
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"error": "올바르지 않은 요청입니다",
+			},
+		)
 		return
 	}
 
 	if err := h.articleService.Post(userID, req); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(
+			http.StatusInternalServerError,
+			gin.H{
+				"error": err.Error(),
+			},
+		)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Post article successfully",
-	})
+	c.JSON(
+		http.StatusOK,
+		gin.H{
+			"message": "아티클이 생성되었습니다",
+		},
+	)
 }
 
 func (h *ArticleHandler) Patch(c *gin.Context) {
@@ -70,41 +107,74 @@ func (h *ArticleHandler) Patch(c *gin.Context) {
 
 	sessionUserID, exists := c.Get("user_id")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Not verified user"})
+		c.JSON(
+			http.StatusUnauthorized,
+			gin.H{
+				"error": "인증되지 않은 유저입니다",
+			},
+		)
 		return
 	}
 
 	userID, ok := sessionUserID.(model.UserID)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user id"})
+		c.JSON(
+			http.StatusUnauthorized,
+			gin.H{
+				"error": "올바르지 않은 유저입니다",
+			},
+		)
 		return
 	}
 
-	user, err := h.userService.GetByID(userID)
+	user, err := h.userService.FindUserByID(userID)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user"})
+		c.JSON(
+			http.StatusUnauthorized,
+			gin.H{
+				"error": "올바르지 않은 유저입니다",
+			},
+		)
 		return
 	}
 
 	if user.Name != username {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Not verified user"})
+		c.JSON(
+			http.StatusUnauthorized,
+			gin.H{
+				"error": "인증되지 않은 유저입니다",
+			},
+		)
 		return
 	}
 
 	var req dto.ArticlePatchRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request data"})
+	if err = c.ShouldBindJSON(&req); err != nil {
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"error": "올바르지 않은 요청입니다",
+			},
+		)
 		return
 	}
 
 	if err = h.articleService.Patch(userID, title, req); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(
+			http.StatusInternalServerError,
+			gin.H{
+				"error": err.Error(),
+			},
+		)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Patch article successfully",
-	})
+	c.JSON(
+		http.StatusOK,
+		gin.H{
+			"message": "아티클이 수정되었습니다",
+		},
+	)
 }
 
 func (h *ArticleHandler) Delete(c *gin.Context) {
@@ -113,33 +183,58 @@ func (h *ArticleHandler) Delete(c *gin.Context) {
 
 	sessionUserID, exists := c.Get("user_id")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Not verified user"})
+		c.JSON(
+			http.StatusUnauthorized,
+			gin.H{
+				"error": "인증되지 않은 유저입니다",
+			},
+		)
 		return
 	}
 
 	userID, ok := sessionUserID.(model.UserID)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user id"})
+		c.JSON(
+			http.StatusUnauthorized,
+			gin.H{
+				"error": "올바르지 않은 유저입니다",
+			},
+		)
 		return
 	}
 
-	user, err := h.userService.GetByID(userID)
+	user, err := h.userService.FindUserByID(userID)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user"})
+		c.JSON(
+			http.StatusUnauthorized,
+			gin.H{
+				"error": "올바르지 않은 유저입니다",
+			},
+		)
 		return
 	}
 
 	if user.Name != username {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Not verified user"})
+		c.JSON(
+			http.StatusUnauthorized,
+			gin.H{
+				"error": "인증되지 않은 유저입니다",
+			},
+		)
 		return
 	}
 
 	if err = h.articleService.Delete(userID, title); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(
+			http.StatusInternalServerError,
+			gin.H{
+				"error": err.Error(),
+			},
+		)
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Delete article successfully",
+		"message": "아티클이 삭제되었습니다",
 	})
 }

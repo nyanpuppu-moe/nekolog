@@ -22,7 +22,7 @@ func (s *UserService) Get(name string) (*model.User, error) {
 	return user, nil
 }
 
-func (s *UserService) GetByID(id model.UserID) (*model.User, error) {
+func (s *UserService) FindUserByID(id model.UserID) (*model.User, error) {
 	user, err := s.userRepo.FindByID(id)
 	if err != nil {
 		return nil, err

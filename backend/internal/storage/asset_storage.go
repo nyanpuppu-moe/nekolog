@@ -1,24 +1,15 @@
 package storage
 
 import (
-	"strconv"
-
 	"os"
 	"path/filepath"
 
 	"nekolog/internal/model"
+	"nekolog/pkg/utils"
 )
 
 type AssetStorage struct {
 	storagePath string
-}
-
-func toStringUserID(id model.UserID) string {
-	return strconv.FormatUint(uint64(id), 10)
-}
-
-func toStringAssetID(id model.AssetID) string {
-	return strconv.FormatUint(uint64(id), 10)
 }
 
 func NewAssetStorage(storagePath string) *AssetStorage {
@@ -30,8 +21,8 @@ func NewAssetStorage(storagePath string) *AssetStorage {
 func (s *AssetStorage) Create(authorID model.UserID, assetID model.AssetID, data []byte) error {
 	fullPath := filepath.Join(
 		s.storagePath,
-		toStringUserID(authorID),
-		toStringAssetID(assetID),
+		utils.ToString(authorID),
+		utils.ToString(assetID),
 	)
 
 	if err := os.MkdirAll(filepath.Dir(fullPath), 0755); err != nil {
@@ -44,8 +35,8 @@ func (s *AssetStorage) Create(authorID model.UserID, assetID model.AssetID, data
 func (s *AssetStorage) Delete(authorID model.UserID, assetID model.AssetID) error {
 	fullPath := filepath.Join(
 		s.storagePath,
-		toStringUserID(authorID),
-		toStringAssetID(assetID),
+		utils.ToString(authorID),
+		utils.ToString(assetID),
 	)
 
 	return os.Remove(fullPath)

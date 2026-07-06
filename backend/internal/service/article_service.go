@@ -1,5 +1,3 @@
-// TODO: Add error message
-
 package service
 
 import (

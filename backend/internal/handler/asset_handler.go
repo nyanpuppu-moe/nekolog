@@ -3,11 +3,11 @@ package handler
 import (
 	"io"
 	"net/http"
-	"strconv"
 
 	"nekolog/internal/dto"
 	"nekolog/internal/model"
 	"nekolog/internal/service"
+	"nekolog/pkg/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,78 +17,122 @@ type AssetHandler struct {
 }
 
 func NewAssetHandler(assetService *service.AssetService) *AssetHandler {
-	return &AssetHandler{assetService: assetService}
+	return &AssetHandler{
+		assetService: assetService,
+	}
 }
 
 func (h *AssetHandler) Get(c *gin.Context) {
-	idParam := c.Param("id")
-
-	idU64, err := strconv.ParseUint(idParam, 10, 64)
+	id, err := utils.StringToUint[model.AssetID](c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid id",
-		})
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"error": "올바르지 않은 아이디입니다",
+			},
+		)
 		return
 	}
-
-	id := model.AssetID(idU64)
 
 	asset, err := h.assetService.Get(id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Not Found asset"})
+		c.JSON(
+			http.StatusNotFound,
+			gin.H{
+				"error": "존재하지 않는 에셋입니다",
+			},
+		)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Get user successfully",
-		"user":    asset,
-	})
+	c.JSON(
+		http.StatusOK,
+		gin.H{
+			"message": "에셋이 조회되었습니다",
+			"user":    asset,
+		},
+	)
 }
 
 func (h *AssetHandler) Post(c *gin.Context) {
 	sessionUserID, exists := c.Get("user_id")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Not verified user"})
+		c.JSON(
+			http.StatusUnauthorized,
+			gin.H{
+				"error": "인증되지 않은 유저입니다",
+			},
+		)
 		return
 	}
 
 	userID, ok := sessionUserID.(model.UserID)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user id"})
+		c.JSON(
+			http.StatusUnauthorized,
+			gin.H{
+				"error": "올바르지 않은 유저입니다",
+			},
+		)
 		return
 	}
 
 	var req dto.AssetPostRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request data"})
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"error": "올바르지 않은 요청입니다",
+			},
+		)
 		return
 	}
 
 	fileHeader, err := c.FormFile("file")
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"error": "파일이 존재하지 않습니다",
+			},
+		)
 		return
 	}
 
 	file, err := fileHeader.Open()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(
+			http.StatusInternalServerError,
+			gin.H{
+				"error": "파일을 열 수 없습니다",
+			},
+		)
 		return
 	}
 	defer file.Close()
 
 	data, err := io.ReadAll(file)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(
+			http.StatusInternalServerError,
+			gin.H{
+				"error": "파일을 읽을 수 없습니다",
+			},
+		)
 		return
 	}
 
 	if err := h.assetService.Post(userID, data, req); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(
+			http.StatusInternalServerError,
+			gin.H{
+				"error": err.Error(),
+			},
+		)
 		return
 	}
 
 	c.JSON(http.StatusCreated, gin.H{
-		"message": "Post asset successfully",
+		"message": "파일이 생성되었습니다",
 	})
 }

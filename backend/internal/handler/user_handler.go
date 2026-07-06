@@ -21,12 +21,20 @@ func (h *UserHandler) Get(c *gin.Context) {
 
 	user, err := h.userService.Get(name)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Not Found user"})
+		c.JSON(
+			http.StatusNotFound,
+			gin.H{
+				"error": "존재하지 않는 사용자입니다",
+			},
+		)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Get user successfully",
-		"user":    user,
-	})
+	c.JSON(
+		http.StatusOK,
+		gin.H{
+			"message": "사용자를 조회하였습니다",
+			"user":    user,
+		},
+	)
 }

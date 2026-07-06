@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 
 	"nekolog/internal/model"
+	"nekolog/pkg/utils"
 )
 
 type ContentStorage struct {
@@ -20,7 +21,7 @@ func NewContentStorage(storagePath string) *ContentStorage {
 func (s *ContentStorage) Create(authorID model.UserID, title string, content string) error {
 	fullPath := filepath.Join(
 		s.storagePath,
-		toStringUserID(authorID),
+		utils.ToString(authorID),
 		title,
 	)
 
@@ -36,7 +37,7 @@ func (s *ContentStorage) Create(authorID model.UserID, title string, content str
 func (s *ContentStorage) Delete(authorID model.UserID, title string) error {
 	fullPath := filepath.Join(
 		s.storagePath,
-		toStringUserID(authorID),
+		utils.ToString(authorID),
 		title,
 	)
 
