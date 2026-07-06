@@ -1,0 +1,117 @@
+<!-- TODO: 페이지 로딩중에 대해서 번역을 적용 -->
+<div
+  id="loading-bar"
+  aria-label="페이지 로딩중"
+  role="progressbar"
+  aria-busy="false"
+  aria-hidden="true"
+  transition:persist
+>
+</div>
+
+<script>
+  class VirtualProgressBar {
+    private bar: HTMLElement | null;
+    private progress: number;
+    private timer: any;
+    private status: "idle" | "loading" | "finishing";
+
+    constructor(selector = "#loading-bar") {
+      this.bar = document.querySelector(selector);
+      this.progress = 0;
+      this.timer = null;
+      this.status = "idle";
+    }
+
+    start() {
+      if (!this.bar || this.status === "loading") return;
+
+      this.status = "loading";
+      this.progress = 0;
+      this.bar.style.opacity = "1";
+      this.bar.style.width = "0%";
+
+      void this.bar.offsetWidth; // Trigger reflow
+
+      this.progress = 15 + Math.random() * 15; // First jump
+      this.bar.style.width = `${this.progress}%`;
+      this.bar.ariaHidden = "false";
+      this.bar.ariaBusy = "true";
+      this.bar.ariaValueNow = "0%";
+
+      // Trickling
+      this.timer = setInterval(() => {
+        if (!this.bar) return;
+        if (this.progress < 85) {
+          const increment =
+            (88 - this.progress) * 0.08 * (Math.random() * 0.5 + 0.6);
+          this.progress += increment;
+        } else if (this.progress < 98) {
+          this.progress += (99 - this.progress) * 0.015;
+        }
+        this.bar.style.width = `${this.progress}%`;
+        console.log(this.bar.style.width);
+      }, 180);
+    }
+
+    finish() {
+      if (!this.bar || this.status === "idle") return;
+
+      this.status = "finishing";
+      if (this.timer) clearInterval(this.timer);
+
+      this.bar.style.width = "100%";
+      this.bar.ariaBusy = "false";
+      this.bar.ariaValueNow = "100%";
+
+      setTimeout(() => {
+        if (this.bar) this.bar.style.opacity = "0";
+
+        setTimeout(() => {
+          if (this.status === "finishing" && this.bar) {
+            this.bar.style.width = "0%";
+            this.progress = 0;
+            this.status = "idle";
+            this.bar.ariaHidden = "true";
+          }
+        }, 300);
+      }, 200);
+    }
+  }
+
+  if (typeof window !== "undefined") {
+    const loadingBar = new VirtualProgressBar("#loading-bar");
+
+    document.addEventListener("astro:before-preparation", () => {
+      loadingBar.start();
+    });
+
+    document.addEventListener("astro:page-load", () => {
+      loadingBar.finish();
+    });
+  }
+</script>
+
+<style>
+  #loading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background-color: #2563eb;
+    width: 0%;
+    opacity: 0;
+    z-index: 999999;
+    pointer-events: none;
+
+    transition:
+      width 0.4s cubic-bezier(0.1, 0.8, 0.3, 1),
+      opacity 0.3s ease-in-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #loading-bar {
+      transition: none !important;
+    }
+  }
+</style>

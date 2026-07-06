@@ -1,5 +1,5 @@
 ---
-"nekolog.moe";
+
 ---
 
 <footer>
@@ -20,36 +20,46 @@
 </footer>
 
 <style>
-  footer {
-    background: var(--crepe-color-surface);
-    color: var(--crepe-color-on-background);
-    padding: 2rem;
-    font-size: 1rem;
+  @layer core {
+    footer {
+      background: var(--crepe-color-surface);
+      color: var(--crepe-color-on-background);
+      padding: 2rem;
+      font-size: 1rem;
+    }
+    hr {
+      border: none;
+      background-clip: content-box;
+      height: 1px;
+      background-color: color-mix(
+        in srgb,
+        var(--crepe-color-outline),
+        transparent 80%
+      );
+    }
+    .split {
+      display: flex;
+      justify-content: space-between;
+    }
+    .holder {
+      display: flex;
+      flex-direction: row;
+      gap: 0.5rem;
+    }
+    p {
+      margin: 0;
+      padding: 0;
+    }
+    a {
+      color: var(--crepe-color-primary);
+    }
   }
-  hr {
-    border: none;
-    background-clip: content-box;
-    height: 1px;
-    background-color: color-mix(
-      in srgb,
-      var(--crepe-color-outline),
-      transparent 80%
-    );
-  }
-  .split {
-    display: flex;
-    justify-content: space-between;
-  }
-  .holder {
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-  }
-  p {
-    margin: 0;
-    padding: 0;
-  }
-  a {
-    color: var(--crepe-color-primary);
+
+  @layer print {
+    @media print {
+      footer {
+        display: none;
+      }
+    }
   }
 </style>

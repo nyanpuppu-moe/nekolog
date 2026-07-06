@@ -17,8 +17,12 @@
 ----라인
 Made with 💖 by FlatBlog Engine • 자유로운 독립형 마이크로 블로그 플랫폼
 
+거의 다 했는데 살짝 다듬어야함
+- [ ] 코드 복사 버튼: 클라이언트 사이드에서 느리게 굽도록 추가 (서버 사이드는 관여 안 함)
+
 # 에디터 및 플러그인 구현 (milkdown)
 
+- [ ] Frontmatter 편집기: 어.. 필요함
 - [ ] BlockEdit 핸들 숨기기: shouldShow 작동 불가로 css 처리하기 (.milkdown-block-handle {display: none;})
 - [ ] 콜라보레이션 플러그인: nodejs 별도 서버로 구현하기
 - [ ] 히스토리 플러그인 (@milkdown/plugin-history, @milkdown/kit/plugin/history): 탑바에 버튼 아이콘 추가하기
@@ -32,15 +36,11 @@ Made with 💖 by FlatBlog Engine • 자유로운 독립형 마이크로 블로
 # 뷰어 및 블로그 기능 (View Mode)
 
 - [ ] 목차(TOC) 기능: 뷰 모드에서 목차 보여주기 구현하기
-- [ ] Frontmatter 연동: 맨 앞에 --- 넣어서 게시글 정보 처리하는 기능 고려하기
 - [ ] 게시글 폴더화(그룹): 그룹 내 게시글 주르륵 뜨는 기능 구현 (작성자가 켜고 끌 수 있게 개발). 특히 그룹은 / 를 통해 path 로 여러 깊이로 구성 가능하게
 - [ ] 연관 게시글 추천: search keyword 기반 추천 또는 명시적 해시태그 생성 기능을 유저가 선택하도록 구현하기
 - [ ] 다음/이전 글 탐색: 유저에게 필드 입력 추가하고, 특히 이전 글은 DB에서 찾아서 자동 추천해주기
-- [ ] 리딩 프로그레스 바: 본문 스크롤에 따른 진행도 표시바 고려하기
-- [ ] 읽기 시간 계산: 평균 읽기 시간을 적당히 계산해서 타이틀 아래에 보여주기 기능 만들기
 - [ ] URL 앵커 동기화: 로드 후 시간 지나면 스크롤 위치에 맞춰 현재 보이는 요소의 `h id`를 URL `#` 뒤에 `replaceState로` 붙여주기
 - [ ] RSS 피드: 블로그 구독을 위한 RSS 피드 생성 기능 고려하기
-- [ ] 코드 복사 버튼: 클라이언트 사이드에서 느리게 굽도록 추가 (서버 사이드는 관여 안 함)
 - [ ] 브레드크럼 및 폴더 뷰: Breadcrumb 기능을 넣고 zed 에디터처럼 패스에 따라 폴더 구조로 시각화하기. 아마 타이틀 바로 아래에 넣으면 될듯
 - [ ] rehype-slug rehype-autolink-headings 를 넣어서 글 제목에 대해 앵커링크 다는 플러그인 추가.
 - [ ] rehype-external-links 달아서 외부 링크를 aria-label 주입 될 수 있게 하기
@@ -59,8 +59,6 @@ Made with 💖 by FlatBlog Engine • 자유로운 독립형 마이크로 블로
 # 키보드 및 내비게이션 접근성
 
 - [ ] 툴바엔 aria-label와 role="toolbar" 가 잘 들어있는지 확인해야함
-- [ ] 건너뛰기 링크 (Skip Navigation): 탭 키 친화 구현으로 누르면 본문으로 바로 이동하는 링크 뜨게 만들기
-- [ ] 포커스 링 스타일 고정: focus-visible 속성에 대해 포커스 링 디자인을 고정하고, 최초 등장 시 위치 파악이 잘 되도록 약간의 애니메이션 추가하기. prefer 따라 애니메이션을 안 할수도 있음
 - [ ] 코드 스니펫 키보드 탐색: <pre tabindex="0" aria-label="코드 스니펫 스크롤 영역"></pre> 적용하여 탭 진입 후 방향키(←, →)로 코드 넘겨볼 수 있게 하기
 - [ ] 앵커 링크 포커스 이동: <h2 id="id" tabindex="-1"> 형태로 구현해서 자바스크립트나 앵커 클릭 이동 시 포커스도 함께 넘어가도록 처리하기.
 - [ ] 키보드 핫키 네비게이션: 탭 키 사용 시 노란색 박스에 단축키를 적어줘서 해당 키 입력 시 바로 포커스 이동하게 만들기 (사이드바 이동 편의성 향상용, aria-hidden="true" 필수). 약간 빔 f 처럼 작동
@@ -76,24 +74,16 @@ Made with 💖 by FlatBlog Engine • 자유로운 독립형 마이크로 블로
 - [ ] 불필요 요소 숨김: 스크린 리더 기계가 읽을 필요 없는 요소는 aria-hidden="true"로 가려주기
 - [ ] 입력 창 설명 연결: 모든 input 요소에는 반드시 설명 텍스트의 ID를 aria-describedby로 연결하기
 - [ ] 버튼 표준 태그 준수: 클릭되는 모든 요소는 무조건 div 대신 표준 <button> 태그로 구현하기
-- [ ] 리스트 불릿 요소 대응: li 태그에 들어가는 bfr(before) 스타일 요소들에 적절한 aria 속성 달아주기 (잘 읽을 수 있게)
-- [ ] rehype-accessible-emojis 달아서 이모지를 스크린리더가 읽을 수 있게 하기
 
 # 동적 상태 및 대화상자 접근성
 
 - [ ] 동적 상태 알림창: 바텀 상태 표시 등 댓글 성공 메시지가 뜨는 곳에 <div role="status" aria-live="polite">를 걸어 스크린 리더가 하던 말을 끝낸 후 읽어주도록 구현하기
-- [ ] 가상 로딩 바 스크린 리더 대응: 깃허브 스타일의 페이크 로딩바 구현 시 aria-busy="true" 및 aria-label="글 불러오는중" 속성 넣어서 로딩 상태 알리기
 - [ ] 사이드바 웹 표준 준수: qwreeyjs의 fulloverlay (웹 표준 <dialog>) 사용하기. 사이드바 메뉴 여는 버튼에 aria-haspopup="dialog" 속성 부여하기
 
 # 프린트 및 접근성, 테마 스타일링
 
-- [ ] 프린트 시 스타일 고정: 프린트 상태 시 라이트 테마로 고정하고 불필요한 포맷 제거하기
-- [ ] 프린트 레이아웃 최적화: 프린팅 상태일 때 푸터, 헤더 및 기타 주변 요소를 display: none;으로 제거하고 본문 스타일 다듬기
-- [ ] 프린트 URL 주소 자동 표시: @media print 내에 article a[href^="http"]:after { content: " (" attr(href) ") "; font-size: 85%; color: #333; } 스타일 추가하기
-- [ ] 프린트 글자 잘림 방지: 요소들에 page-break-inside: avoid; 속성 넣어서 인쇄 시 글자 잘림 현상 절대 방지하기
 - [ ] 고대비 테마 대응: @media (forced-colors: active) 및 @media (prefers-contrast: more) 미디어 쿼리를 사용해 고대비 모드 완벽 대응하기
 - [ ] 모션 감축 대응: 애니메이션 효과에 prefers-reduced-motion을 따르도록 구현하고, 뷰 트랜지션(View Transitions) 사용 시에도 감축 모드면 모션을 즉시 지우도록 처리하기
-- [ ] 테마 상태 깜빡임 방지 (FOUC): 다크/라이트 테마 선택 여부를 쿠키에 저장하고, 서버 사이드에서 이 쿠키를 읽어 head 안에 style 인라인 주입으로 배경색을 미리 두어 화면 깜빡임 방지하기 (클라에선 document.cookie 변경 대응, 테마 설정이 없을 땐 시스템 미디어 쿼리 우선 작동)
 - [ ] 팝오버 구현 시 popover 를 사용하고 (Popover API) haspopup="menu" aria-expanded="true" 꼭 지키기. 위치 놓는건 anchor positioning 사용
 
 # 다국어 지원
@@ -109,6 +99,21 @@ Made with 💖 by FlatBlog Engine • 자유로운 독립형 마이크로 블로
 # 최종
 
 - [ ] CNAME 가능하도록 구성
+
+# END
+- [x] 건너뛰기 링크 (Skip Navigation): 탭 키 친화 구현으로 누르면 본문으로 바로 이동하는 링크 뜨게 만들기
+- [x] 포커스 링 스타일 고정: focus-visible 속성에 대해 포커스 링 디자인을 고정하고, 최초 등장 시 위치 파악이 잘 되도록 약간의 애니메이션 추가하기. prefer 따라 애니메이션을 안 할수도 있음
+- [x] 테마 상태 깜빡임 방지 (FOUC): 다크/라이트 테마 선택 여부를 쿠키에 저장하고, 서버 사이드에서 이 쿠키를 읽어 head 안에 style 인라인 주입으로 배경색을 미리 두어 화면 깜빡임 방지하기 (클라에선 document.cookie 변경 대응, 테마 설정이 없을 땐 시스템 미디어 쿼리 우선 작동)
+- [x] 프린트 시 스타일 고정: 프린트 상태 시 라이트 테마로 고정하고 불필요한 포맷 제거하기
+- [x] 프린트 레이아웃 최적화: 프린팅 상태일 때 푸터, 헤더 및 기타 주변 요소를 display: none;으로 제거하고 본문 스타일 다듬기
+- [x] 프린트 URL 주소 자동 표시: @media print 내에 article a[href^="http"]:after { content: " (" attr(href) ") "; font-size: 85%; color: #333; } 스타일 추가하기
+- [x] 프린트 글자 잘림 방지: 요소들에 page-break-inside: avoid; 속성 넣어서 인쇄 시 글자 잘림 현상 절대 방지하기
+- [x] 가상 로딩 바 스크린 리더 대응: 깃허브 스타일의 페이크 로딩바 구현 시 aria-busy="true" 및 aria-label="글 불러오는중" 속성 넣어서 로딩 상태 알리기
+- [x] rehype-accessible-emojis 달아서 이모지를 스크린리더가 읽을 수 있게 하기
+- [x] 리스트 불릿 요소 대응: li 태그에 들어가는 bfr(before) 스타일 요소들에 적절한 aria 속성 달아주기 (잘 읽을 수 있게)
+- [x] Frontmatter 연동: 맨 앞에 --- 넣어서 게시글 정보 처리하는 기능 고려하기
+- [x] 읽기 시간 계산: 평균 읽기 시간을 적당히 계산해서 타이틀 아래에 보여주기 기능 만들기
+- [NO] 리딩 프로그레스 바: 본문 스크롤에 따른 진행도 표시바 고려하기 <<<안 하는것으로 함>>>
 
 # 기타 앨랠래
 

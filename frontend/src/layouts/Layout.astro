@@ -6,12 +6,35 @@ interface Props extends HTMLBaseProps {}
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Main from "@/components/Main.astro";
+import BodyStart from "@/components/BodyStart.astro";
+import CodeCopyButton from "@/components/CodeCopyButton.astro";
+
+const customComponents = import.meta.glob("/src/custom/*.astro", {
+  eager: true,
+});
+const CustomHeader = (customComponents["/src/custom/Header.astro"] as any)
+  ?.default;
+const CustomFooter = (customComponents["/src/custom/Footer.astro"] as any)
+  ?.default;
+const CustomMain = (customComponents["/src/custom/Main.astro"] as any)?.default;
+const CustomBodyStart = (customComponents["/src/custom/BodyStart.astro"] as any)
+  ?.default;
 ---
 
 <HTMLBase {...Astro.props}>
-  <Header />
-  <Main>
-    <slot />
-  </Main>
-  <Footer />
+  <CodeCopyButton />
+  {CustomBodyStart ? <CustomBodyStart /> : <BodyStart />}
+  {CustomHeader ? <CustomHeader /> : <Header />}
+  {
+    CustomMain ? (
+      <CustomMain>
+        <slot />
+      </CustomMain>
+    ) : (
+      <Main>
+        <slot />
+      </Main>
+    )
+  }
+  {CustomFooter ? <CustomFooter /> : <Footer />}
 </HTMLBase>

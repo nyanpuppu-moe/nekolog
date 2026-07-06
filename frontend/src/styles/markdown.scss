@@ -1,6 +1,11 @@
 @use "sass:meta";
 @import url("@milkdown/crepe/theme/common/style.css") layer(theme);
 
+@mixin print-color-exact {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
 // Fix readonly view mode diffs
 @mixin md-view-reduce-inline-gaps {
   // Reduce inline block gaps
@@ -26,7 +31,8 @@
       padding-bottom: 0.25rem; // 4px
     }
     > li::before {
-      content: "•";
+      @include print-color-exact;
+      content: "•" / "";
       position: absolute;
       left: 0;
       top: 0.25rem; // 4px;
@@ -85,9 +91,9 @@
       display: none;
     }
     input[type="checkbox"] {
+      @include print-color-exact;
       position: absolute;
       left: 0;
-      top: 0.25rem; // 4px
       -webkit-appearance: none;
       appearance: none;
       background-color: var(--crepe-color-outline);
@@ -207,8 +213,11 @@
 @mixin md-view-codeblock {
   pre {
     background: transparent;
+    white-space: pre;
+    overflow-x: auto;
   }
   .hljs {
+    @include print-color-exact;
     background: var(--crepe-color-surface);
   }
 }
@@ -246,6 +255,10 @@
 
 @layer print {
   @media print {
+    .milkdown .ProseMirror {
+      max-width: none;
+      padding: 0;
+      margin: 0;
+    }
   }
-  // 마진이랑 어쩌고저쩌고 다 빼기
 }

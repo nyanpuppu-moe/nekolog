@@ -18,3 +18,35 @@ body {
   padding: 0;
   margin: 0;
 }
+
+// Ring animation
+*:focus {
+  outline: none;
+}
+*:focus-visible {
+  outline: 4px solid var(--focus-ring-color); // 4px Outline
+  outline-offset: 2px; // Offset outline 2px
+  border-radius: inherit; // Keep radius of parent
+
+  // Fade in and scale down animate
+  animation: focus-ring-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes focus-ring-in {
+  from {
+    outline-offset: 10px; // Scale down like effect
+    outline-color: transparent; // Fade in
+  }
+  to {
+    outline-offset: 2px;
+    outline-color: var(--focus-ring-color);
+  }
+}
+// Remove animation if prefers-reduced-motion is set
+@media (prefers-reduced-motion: reduce) {
+  *:focus-visible {
+    animation: none !important;
+    outline-offset: 2px !important;
+    outline-color: var(--focus-ring-color) !important;
+  }
+}

@@ -1,0 +1,11 @@
+.milkdown.view .ProseMirror a[href^="http"]::after {
+  content: " (" attr(href) ") ";
+  font-size: 85%;
+  opacity: 0.85;
+}
+html {
+  background: transparent !important;
+}
+.view pre {
+  white-space: pre-wrap !important;
+}
