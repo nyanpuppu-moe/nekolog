@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"nekolog/internal/engine"
 	"nekolog/internal/service"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +17,7 @@ func NewUserHandler(s *service.UserService) *UserHandler {
 	return &UserHandler{userService: s}
 }
 
-func (h *UserHandler) Get(c *gin.Context) {
+func (h *UserHandler) Get(c *engine.Context) {
 	name := c.Param("username")
 
 	user, err := h.userService.Get(name)

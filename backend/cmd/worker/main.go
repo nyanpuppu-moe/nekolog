@@ -1,19 +1,16 @@
 package main
 
 import (
-	"log"
-
 	"nekolog/internal/config"
 	"nekolog/internal/database"
+	"nekolog/internal/engine"
 	"nekolog/internal/handler"
+	"nekolog/internal/log"
 	"nekolog/internal/middleware"
 	"nekolog/internal/model"
 	"nekolog/internal/repository"
 	"nekolog/internal/service"
 	"nekolog/internal/storage"
-
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -25,12 +22,12 @@ func main() {
 	dbPath := config.Database.Path
 	db, err := database.Connect(dbPath)
 	if err != nil {
-		log.Fatalf("Faild to can not connect sqlite: %v", err)
+		log.Error("Faild to can not connect sqlite: %v", err)
 	}
 
 	err = db.AutoMigrate(&model.User{})
 	if err != nil {
-		log.Fatalf("Faild to sqlite migration: %v", err)
+		log.Error("Faild to sqlite migration: %v", err)
 	}
 
 	assetsStorage := storage.NewAssetStorage(config.Storage.AssetsPath)
@@ -58,22 +55,14 @@ func main() {
 	)
 	assetHandler := handler.NewAssetHandler(assetService)
 
-	router := gin.Default()
+	router := engine.NewRouter()
 
-	var store sessions.Store
-
-	if config.Environment.Mode == "development" {
-		store = service.InitDevelopmentSessionStore(config.Server.SessionStore.PrivateKey)
-	} else {
-		gin.SetMode(gin.ReleaseMode)
-		store = service.InitSessionStore(config.Server.SessionStore.PrivateKey)
+	apiRoutes := router.Group("/api")
+	{
+		apiRoutes.GET("/users/:username", userHandler.Get)
+		apiRoutes.GET("/articles/:username/:title", articleHandler.Get)
+		apiRoutes.GET("/assets/:id", assetHandler.Get)
 	}
-
-	router.Use(sessions.Sessions("NEKO_LOG_SESSION", store))
-
-	router.GET("/users/:username", userHandler.Get)
-	router.GET("/articles/:username/:title", articleHandler.Get)
-	router.GET("/assets/:id", assetHandler.Get)
 
 	authRoutes := router.Group("/api/auth")
 	{
@@ -83,7 +72,7 @@ func main() {
 	}
 
 	protectedRoutes := router.Group("/api/protected")
-	protectedRoutes.Use(middleware.AuthRequired())
+	protectedRoutes.Use(middleware.AuthRequired)
 	{
 		protectedRoutes.POST("/article", articleHandler.Post)
 		protectedRoutes.PATCH("/article/:username/:title", articleHandler.Patch)
@@ -92,5 +81,5 @@ func main() {
 		protectedRoutes.POST("/asset", assetHandler.Post)
 	}
 
-	router.Run(":" + config.Server.Port)
+	router.Serve(":" + config.Server.Port)
 }

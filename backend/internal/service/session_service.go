@@ -12,8 +12,6 @@ import (
 	"nekolog/internal/model"
 	"nekolog/internal/repository"
 
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
 	"golang.org/x/crypto/argon2"
 )
 
@@ -122,30 +120,4 @@ func (s *SessionService) Login(req dto.SessionLoginRequest) (*model.User, error)
 	}
 
 	return user, nil
-}
-
-func InitSessionStore(privateKey string) sessions.Store {
-	store := cookie.NewStore([]byte(privateKey))
-
-	store.Options(sessions.Options{
-		Path:     "/",
-		MaxAge:   3600 * 24,
-		HttpOnly: true,
-		Secure:   true,
-	})
-
-	return store
-}
-
-func InitDevelopmentSessionStore(privateKey string) sessions.Store {
-	store := cookie.NewStore([]byte(privateKey))
-
-	store.Options(sessions.Options{
-		Path:     "/",
-		MaxAge:   3600 * 24,
-		HttpOnly: true,
-		Secure:   false,
-	})
-
-	return store
 }

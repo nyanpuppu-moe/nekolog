@@ -5,9 +5,10 @@ import (
 	"net/http"
 
 	"nekolog/internal/dto"
+	"nekolog/internal/engine"
 	"nekolog/internal/model"
 	"nekolog/internal/service"
-	"nekolog/pkg/utils"
+	"nekolog/internal/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,7 +23,7 @@ func NewAssetHandler(assetService *service.AssetService) *AssetHandler {
 	}
 }
 
-func (h *AssetHandler) Get(c *gin.Context) {
+func (h *AssetHandler) Get(c *engine.Context) {
 	id, err := utils.StringToUint[model.AssetID](c.Param("id"))
 	if err != nil {
 		c.JSON(
@@ -54,9 +55,9 @@ func (h *AssetHandler) Get(c *gin.Context) {
 	)
 }
 
-func (h *AssetHandler) Post(c *gin.Context) {
-	sessionUserID, exists := c.Get("user_id")
-	if !exists {
+func (h *AssetHandler) Post(c *engine.Context) {
+	sessionUserID := c.SessionGet("user_id")
+	if sessionUserID == nil {
 		c.JSON(
 			http.StatusUnauthorized,
 			gin.H{
@@ -78,7 +79,7 @@ func (h *AssetHandler) Post(c *gin.Context) {
 	}
 
 	var req dto.AssetPostRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
+	if err := c.BindJSON(&req); err != nil {
 		c.JSON(
 			http.StatusBadRequest,
 			gin.H{

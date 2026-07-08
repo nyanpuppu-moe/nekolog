@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"nekolog/internal/dto"
+	"nekolog/internal/engine"
 	"nekolog/internal/model"
 	"nekolog/internal/service"
 
@@ -25,7 +26,7 @@ func NewArticleHandler(
 	}
 }
 
-func (h *ArticleHandler) Get(c *gin.Context) {
+func (h *ArticleHandler) Get(c *engine.Context) {
 	username := c.Param("username")
 	title := c.Param("title")
 
@@ -49,9 +50,9 @@ func (h *ArticleHandler) Get(c *gin.Context) {
 	)
 }
 
-func (h *ArticleHandler) Post(c *gin.Context) {
-	sessionUserID, exists := c.Get("user_id")
-	if !exists {
+func (h *ArticleHandler) Post(c *engine.Context) {
+	sessionUserID := c.SessionGet("user_id")
+	if sessionUserID == nil {
 		c.JSON(
 			http.StatusUnauthorized,
 			gin.H{
@@ -73,7 +74,7 @@ func (h *ArticleHandler) Post(c *gin.Context) {
 	}
 
 	var req dto.ArticlePostRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
+	if err := c.BindJSON(&req); err != nil {
 		c.JSON(
 			http.StatusBadRequest,
 			gin.H{
@@ -101,12 +102,12 @@ func (h *ArticleHandler) Post(c *gin.Context) {
 	)
 }
 
-func (h *ArticleHandler) Patch(c *gin.Context) {
+func (h *ArticleHandler) Patch(c *engine.Context) {
 	username := c.Param("username")
 	title := c.Param("title")
 
-	sessionUserID, exists := c.Get("user_id")
-	if !exists {
+	sessionUserID := c.SessionGet("user_id")
+	if sessionUserID == nil {
 		c.JSON(
 			http.StatusUnauthorized,
 			gin.H{
@@ -149,7 +150,7 @@ func (h *ArticleHandler) Patch(c *gin.Context) {
 	}
 
 	var req dto.ArticlePatchRequest
-	if err = c.ShouldBindJSON(&req); err != nil {
+	if err = c.BindJSON(&req); err != nil {
 		c.JSON(
 			http.StatusBadRequest,
 			gin.H{
@@ -177,12 +178,12 @@ func (h *ArticleHandler) Patch(c *gin.Context) {
 	)
 }
 
-func (h *ArticleHandler) Delete(c *gin.Context) {
+func (h *ArticleHandler) Delete(c *engine.Context) {
 	username := c.Param("username")
 	title := c.Param("title")
 
-	sessionUserID, exists := c.Get("user_id")
-	if !exists {
+	sessionUserID := c.SessionGet("user_id")
+	if sessionUserID == nil {
 		c.JSON(
 			http.StatusUnauthorized,
 			gin.H{

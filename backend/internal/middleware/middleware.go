@@ -1,29 +1,25 @@
 package middleware
 
 import (
+	"nekolog/internal/engine"
 	"net/http"
-
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
 )
 
-func AuthRequired() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		session := sessions.Default(c)
-		userID := session.Get("user_id")
+func AuthRequired(c *engine.Context) {
+	userID := c.SessionGet("user_id")
 
-		if userID == nil {
-			c.JSON(
-				http.StatusUnauthorized,
-				gin.H{
-					"error": "Faild auth, please account login",
-				},
-			)
-			c.Abort()
-			return
-		}
-
-		c.Set("user_id", userID)
-		c.Next()
+	if userID == nil {
+		c.JSON(
+			http.StatusUnauthorized,
+			engine.Object{
+				"error": "Faild auth, please account login",
+			},
+		)
+		c.Abort()
+		return
 	}
+
+	c.SessionSet("user_id", userID)
+
+	c.Next()
 }

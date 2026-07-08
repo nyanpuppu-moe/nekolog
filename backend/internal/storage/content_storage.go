@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 
 	"nekolog/internal/model"
-	"nekolog/pkg/utils"
+	"nekolog/internal/utils"
 )
 
 type ContentStorage struct {
