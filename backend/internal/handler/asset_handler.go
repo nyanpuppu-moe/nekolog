@@ -9,8 +9,6 @@ import (
 	"nekolog/internal/model"
 	"nekolog/internal/service"
 	"nekolog/internal/utils"
-
-	"github.com/gin-gonic/gin"
 )
 
 type AssetHandler struct {
@@ -28,7 +26,7 @@ func (h *AssetHandler) Get(c *engine.Context) {
 	if err != nil {
 		c.JSON(
 			http.StatusBadRequest,
-			gin.H{
+			engine.Object{
 				"error": "올바르지 않은 아이디입니다",
 			},
 		)
@@ -39,7 +37,7 @@ func (h *AssetHandler) Get(c *engine.Context) {
 	if err != nil {
 		c.JSON(
 			http.StatusNotFound,
-			gin.H{
+			engine.Object{
 				"error": "존재하지 않는 에셋입니다",
 			},
 		)
@@ -48,7 +46,7 @@ func (h *AssetHandler) Get(c *engine.Context) {
 
 	c.JSON(
 		http.StatusOK,
-		gin.H{
+		engine.Object{
 			"message": "에셋이 조회되었습니다",
 			"user":    asset,
 		},
@@ -60,7 +58,7 @@ func (h *AssetHandler) Post(c *engine.Context) {
 	if sessionUserID == nil {
 		c.JSON(
 			http.StatusUnauthorized,
-			gin.H{
+			engine.Object{
 				"error": "인증되지 않은 유저입니다",
 			},
 		)
@@ -71,7 +69,7 @@ func (h *AssetHandler) Post(c *engine.Context) {
 	if !ok {
 		c.JSON(
 			http.StatusUnauthorized,
-			gin.H{
+			engine.Object{
 				"error": "올바르지 않은 유저입니다",
 			},
 		)
@@ -82,7 +80,7 @@ func (h *AssetHandler) Post(c *engine.Context) {
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(
 			http.StatusBadRequest,
-			gin.H{
+			engine.Object{
 				"error": "올바르지 않은 요청입니다",
 			},
 		)
@@ -93,7 +91,7 @@ func (h *AssetHandler) Post(c *engine.Context) {
 	if err != nil {
 		c.JSON(
 			http.StatusBadRequest,
-			gin.H{
+			engine.Object{
 				"error": "파일이 존재하지 않습니다",
 			},
 		)
@@ -104,7 +102,7 @@ func (h *AssetHandler) Post(c *engine.Context) {
 	if err != nil {
 		c.JSON(
 			http.StatusInternalServerError,
-			gin.H{
+			engine.Object{
 				"error": "파일을 열 수 없습니다",
 			},
 		)
@@ -116,7 +114,7 @@ func (h *AssetHandler) Post(c *engine.Context) {
 	if err != nil {
 		c.JSON(
 			http.StatusInternalServerError,
-			gin.H{
+			engine.Object{
 				"error": "파일을 읽을 수 없습니다",
 			},
 		)
@@ -126,14 +124,14 @@ func (h *AssetHandler) Post(c *engine.Context) {
 	if err := h.assetService.Post(userID, data, req); err != nil {
 		c.JSON(
 			http.StatusInternalServerError,
-			gin.H{
+			engine.Object{
 				"error": err.Error(),
 			},
 		)
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{
+	c.JSON(http.StatusCreated, engine.Object{
 		"message": "파일이 생성되었습니다",
 	})
 }

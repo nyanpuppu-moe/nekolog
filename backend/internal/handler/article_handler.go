@@ -7,8 +7,6 @@ import (
 	"nekolog/internal/engine"
 	"nekolog/internal/model"
 	"nekolog/internal/service"
-
-	"github.com/gin-gonic/gin"
 )
 
 type ArticleHandler struct {
@@ -34,7 +32,7 @@ func (h *ArticleHandler) Get(c *engine.Context) {
 	if err != nil {
 		c.JSON(
 			http.StatusNotFound,
-			gin.H{
+			engine.Object{
 				"error": "존재하지 않는 아티클입니다",
 			},
 		)
@@ -43,7 +41,7 @@ func (h *ArticleHandler) Get(c *engine.Context) {
 
 	c.JSON(
 		http.StatusOK,
-		gin.H{
+		engine.Object{
 			"message": "아티클이 조회되었습니다",
 			"article": article,
 		},
@@ -55,7 +53,7 @@ func (h *ArticleHandler) Post(c *engine.Context) {
 	if sessionUserID == nil {
 		c.JSON(
 			http.StatusUnauthorized,
-			gin.H{
+			engine.Object{
 				"error": "인증되지 않은 유저입니다",
 			},
 		)
@@ -66,7 +64,7 @@ func (h *ArticleHandler) Post(c *engine.Context) {
 	if !ok {
 		c.JSON(
 			http.StatusUnauthorized,
-			gin.H{
+			engine.Object{
 				"error": "올바르지 않은 유저입니다",
 			},
 		)
@@ -77,7 +75,7 @@ func (h *ArticleHandler) Post(c *engine.Context) {
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(
 			http.StatusBadRequest,
-			gin.H{
+			engine.Object{
 				"error": "올바르지 않은 요청입니다",
 			},
 		)
@@ -87,7 +85,7 @@ func (h *ArticleHandler) Post(c *engine.Context) {
 	if err := h.articleService.Post(userID, req); err != nil {
 		c.JSON(
 			http.StatusInternalServerError,
-			gin.H{
+			engine.Object{
 				"error": err.Error(),
 			},
 		)
@@ -96,7 +94,7 @@ func (h *ArticleHandler) Post(c *engine.Context) {
 
 	c.JSON(
 		http.StatusOK,
-		gin.H{
+		engine.Object{
 			"message": "아티클이 생성되었습니다",
 		},
 	)
@@ -110,7 +108,7 @@ func (h *ArticleHandler) Patch(c *engine.Context) {
 	if sessionUserID == nil {
 		c.JSON(
 			http.StatusUnauthorized,
-			gin.H{
+			engine.Object{
 				"error": "인증되지 않은 유저입니다",
 			},
 		)
@@ -121,7 +119,7 @@ func (h *ArticleHandler) Patch(c *engine.Context) {
 	if !ok {
 		c.JSON(
 			http.StatusUnauthorized,
-			gin.H{
+			engine.Object{
 				"error": "올바르지 않은 유저입니다",
 			},
 		)
@@ -132,7 +130,7 @@ func (h *ArticleHandler) Patch(c *engine.Context) {
 	if err != nil {
 		c.JSON(
 			http.StatusUnauthorized,
-			gin.H{
+			engine.Object{
 				"error": "올바르지 않은 유저입니다",
 			},
 		)
@@ -142,7 +140,7 @@ func (h *ArticleHandler) Patch(c *engine.Context) {
 	if user.Name != username {
 		c.JSON(
 			http.StatusUnauthorized,
-			gin.H{
+			engine.Object{
 				"error": "인증되지 않은 유저입니다",
 			},
 		)
@@ -153,7 +151,7 @@ func (h *ArticleHandler) Patch(c *engine.Context) {
 	if err = c.BindJSON(&req); err != nil {
 		c.JSON(
 			http.StatusBadRequest,
-			gin.H{
+			engine.Object{
 				"error": "올바르지 않은 요청입니다",
 			},
 		)
@@ -163,7 +161,7 @@ func (h *ArticleHandler) Patch(c *engine.Context) {
 	if err = h.articleService.Patch(userID, title, req); err != nil {
 		c.JSON(
 			http.StatusInternalServerError,
-			gin.H{
+			engine.Object{
 				"error": err.Error(),
 			},
 		)
@@ -172,7 +170,7 @@ func (h *ArticleHandler) Patch(c *engine.Context) {
 
 	c.JSON(
 		http.StatusOK,
-		gin.H{
+		engine.Object{
 			"message": "아티클이 수정되었습니다",
 		},
 	)
@@ -186,7 +184,7 @@ func (h *ArticleHandler) Delete(c *engine.Context) {
 	if sessionUserID == nil {
 		c.JSON(
 			http.StatusUnauthorized,
-			gin.H{
+			engine.Object{
 				"error": "인증되지 않은 유저입니다",
 			},
 		)
@@ -197,7 +195,7 @@ func (h *ArticleHandler) Delete(c *engine.Context) {
 	if !ok {
 		c.JSON(
 			http.StatusUnauthorized,
-			gin.H{
+			engine.Object{
 				"error": "올바르지 않은 유저입니다",
 			},
 		)
@@ -208,7 +206,7 @@ func (h *ArticleHandler) Delete(c *engine.Context) {
 	if err != nil {
 		c.JSON(
 			http.StatusUnauthorized,
-			gin.H{
+			engine.Object{
 				"error": "올바르지 않은 유저입니다",
 			},
 		)
@@ -218,7 +216,7 @@ func (h *ArticleHandler) Delete(c *engine.Context) {
 	if user.Name != username {
 		c.JSON(
 			http.StatusUnauthorized,
-			gin.H{
+			engine.Object{
 				"error": "인증되지 않은 유저입니다",
 			},
 		)
@@ -228,14 +226,14 @@ func (h *ArticleHandler) Delete(c *engine.Context) {
 	if err = h.articleService.Delete(userID, title); err != nil {
 		c.JSON(
 			http.StatusInternalServerError,
-			gin.H{
+			engine.Object{
 				"error": err.Error(),
 			},
 		)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusOK, engine.Object{
 		"message": "아티클이 삭제되었습니다",
 	})
 }

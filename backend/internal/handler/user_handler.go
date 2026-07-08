@@ -5,8 +5,6 @@ import (
 
 	"nekolog/internal/engine"
 	"nekolog/internal/service"
-
-	"github.com/gin-gonic/gin"
 )
 
 type UserHandler struct {
@@ -24,7 +22,7 @@ func (h *UserHandler) Get(c *engine.Context) {
 	if err != nil {
 		c.JSON(
 			http.StatusNotFound,
-			gin.H{
+			engine.Object{
 				"error": "존재하지 않는 사용자입니다",
 			},
 		)
@@ -33,7 +31,7 @@ func (h *UserHandler) Get(c *engine.Context) {
 
 	c.JSON(
 		http.StatusOK,
-		gin.H{
+		engine.Object{
 			"message": "사용자를 조회하였습니다",
 			"user":    user,
 		},

@@ -3,10 +3,9 @@ package service
 import (
 	"errors"
 	"nekolog/internal/dto"
+	"nekolog/internal/engine"
 	"nekolog/internal/model"
 	"nekolog/internal/repository"
-
-	"github.com/gin-gonic/gin"
 )
 
 type ArticleService struct {
@@ -57,7 +56,7 @@ func (s *ArticleService) Patch(userID model.UserID, title string, req dto.Articl
 		return err
 	}
 
-	updates := make(gin.H)
+	updates := make(engine.Object)
 	updates["content"] = req.Content
 
 	return s.articleRepo.Update(currentArticle.ID, updates)
