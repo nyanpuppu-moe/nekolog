@@ -16,7 +16,8 @@ import (
 func main() {
 	config, err := config.Load()
 	if err != nil {
-		panic(err)
+		log.Error("Faild to load config: %v", err)
+		return
 	}
 
 	dbPath := config.Database.Path
