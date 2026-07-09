@@ -1,9 +1,9 @@
 package repository
 
 import (
-	"nekolog/internal/engine"
 	"nekolog/internal/model"
 	"nekolog/internal/storage"
+	"nekolog/internal/web"
 
 	"gorm.io/gorm"
 )

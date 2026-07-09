@@ -3,7 +3,6 @@ package main
 import (
 	"nekolog/internal/config"
 	"nekolog/internal/database"
-	"nekolog/internal/engine"
 	"nekolog/internal/handler"
 	"nekolog/internal/log"
 	"nekolog/internal/middleware"
@@ -11,6 +10,7 @@ import (
 	"nekolog/internal/repository"
 	"nekolog/internal/service"
 	"nekolog/internal/storage"
+	"nekolog/internal/web"
 )
 
 func main() {
