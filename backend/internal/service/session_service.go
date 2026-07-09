@@ -2,17 +2,11 @@ package service
 
 import (
 	"errors"
-	"strings"
-
-	"crypto/rand"
-	"crypto/subtle"
-	"encoding/base64"
 
 	"nekolog/internal/dto"
 	"nekolog/internal/model"
 	"nekolog/internal/repository"
-
-	"golang.org/x/crypto/argon2"
+	"nekolog/internal/utils"
 )
 
 type SessionService struct {
@@ -21,57 +15,6 @@ type SessionService struct {
 
 func NewSessionService(repo *repository.UserRepository) *SessionService {
 	return &SessionService{userRepo: repo}
-}
-
-func hashPassword(password string) (string, error) {
-	salt := make([]byte, 16)
-	_, err := rand.Read(salt)
-	if err != nil {
-		return "", err
-	}
-
-	hash := argon2.IDKey(
-		[]byte(password),
-		salt,
-		1,       // time
-		64*1024, // memory (64MB)
-		4,       // threads
-		32,      // key length
-	)
-
-	b64Salt := base64.RawStdEncoding.EncodeToString(salt)
-	b64Hash := base64.RawStdEncoding.EncodeToString(hash)
-
-	return b64Salt + "." + b64Hash, nil
-}
-
-func comparePassword(password, encoded string) bool {
-	parts := strings.Split(encoded, ".")
-
-	if len(parts) != 2 {
-		return false
-	}
-
-	salt, err := base64.RawStdEncoding.DecodeString(parts[0])
-	if err != nil {
-		return false
-	}
-
-	expectedHash, err := base64.RawStdEncoding.DecodeString(parts[1])
-	if err != nil {
-		return false
-	}
-
-	hash := argon2.IDKey(
-		[]byte(password),
-		salt,
-		1,
-		64*1024,
-		4,
-		32,
-	)
-
-	return subtle.ConstantTimeCompare(hash, expectedHash) == 1
 }
 
 func (s *SessionService) Register(req dto.SessionRegisterRequest) error {
@@ -89,7 +32,7 @@ func (s *SessionService) Register(req dto.SessionRegisterRequest) error {
 		return errors.New("Can not use this name")
 	}
 
-	hashedPassword, err := hashPassword(req.Password)
+	hashedPassword, err := utils.HashPassword(req.Password)
 	if err != nil {
 		return err
 	}
@@ -110,12 +53,12 @@ func (s *SessionService) Login(req dto.SessionLoginRequest) (*model.User, error)
 		return nil, errors.New("Incorrect email or password")
 	}
 
-	hashedPassword, err := hashPassword(req.Password)
+	hashedPassword, err := utils.HashPassword(req.Password)
 	if err != nil {
 		return nil, err
 	}
 
-	if comparePassword(user.Password, hashedPassword) {
+	if utils.ComparePassword(user.Password, hashedPassword) {
 		return nil, errors.New("Incorrect email or password")
 	}
 

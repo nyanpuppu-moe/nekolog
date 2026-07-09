@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"nekolog/internal/dto"
+	"nekolog/internal/log"
 	"nekolog/internal/model"
 	"nekolog/internal/service"
 	"nekolog/internal/utils"
@@ -24,6 +25,7 @@ func NewAssetHandler(assetService *service.AssetService) *AssetHandler {
 func (h *AssetHandler) Get(c *engine.Context) {
 	id, err := utils.StringToUint[model.AssetID](c.Param("id"))
 	if err != nil {
+		log.Warn("올바르지 않은 아이디입니다: %d", id)
 		c.JSON(
 			http.StatusBadRequest,
 			engine.Object{
@@ -35,6 +37,7 @@ func (h *AssetHandler) Get(c *engine.Context) {
 
 	asset, err := h.assetService.Get(id)
 	if err != nil {
+		log.Warn("존재하지 않는 에셋입니다: %d", id)
 		c.JSON(
 			http.StatusNotFound,
 			engine.Object{
@@ -44,6 +47,7 @@ func (h *AssetHandler) Get(c *engine.Context) {
 		return
 	}
 
+	log.Info("에셋이 조회되었습니다: %d", id)
 	c.JSON(
 		http.StatusOK,
 		engine.Object{

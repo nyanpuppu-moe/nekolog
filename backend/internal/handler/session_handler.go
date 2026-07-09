@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"nekolog/internal/dto"
+	"nekolog/internal/log"
 	"nekolog/internal/service"
 	"nekolog/internal/web"
 )
@@ -19,6 +20,7 @@ func NewSessionHandler(s *service.SessionService) *SessionHandler {
 func (h *SessionHandler) Register(c *engine.Context) {
 	var req dto.SessionRegisterRequest
 	if err := c.BindJSON(&req); err != nil {
+		log.Warn("올바르지 않은 요청입니다: %v", err)
 		c.JSON(
 			http.StatusBadRequest,
 			engine.Object{
@@ -30,6 +32,7 @@ func (h *SessionHandler) Register(c *engine.Context) {
 
 	err := h.sessionService.Register(req)
 	if err != nil {
+		log.Warn("사용자 등록에 실패하였습니다: %v", err)
 		c.JSON(
 			http.StatusConflict,
 			engine.Object{
@@ -39,6 +42,7 @@ func (h *SessionHandler) Register(c *engine.Context) {
 		return
 	}
 
+	log.Info("사용자를 등록하였습니다: %s", req.Name)
 	c.JSON(
 		http.StatusCreated,
 		engine.Object{
@@ -50,6 +54,7 @@ func (h *SessionHandler) Register(c *engine.Context) {
 func (h *SessionHandler) Login(c *engine.Context) {
 	var req dto.SessionLoginRequest
 	if err := c.BindJSON(&req); err != nil {
+		log.Warn("올바르지 않은 요청입니다: %v", err)
 		c.JSON(
 			http.StatusBadRequest,
 			engine.Object{
@@ -61,6 +66,7 @@ func (h *SessionHandler) Login(c *engine.Context) {
 
 	user, err := h.sessionService.Login(req)
 	if err != nil {
+		log.Warn("사용자 이름 또는 비밀번호가 올바르지 않습니다")
 		c.JSON(
 			http.StatusUnauthorized,
 			engine.Object{
@@ -72,6 +78,7 @@ func (h *SessionHandler) Login(c *engine.Context) {
 
 	c.SessionSet("user_id", user.ID)
 	if err := c.SessionSave(); err != nil {
+		log.Warn("세션을 저장하지 못했습니다: %v", err)
 		c.JSON(
 			http.StatusInternalServerError,
 			engine.Object{
@@ -81,6 +88,7 @@ func (h *SessionHandler) Login(c *engine.Context) {
 		return
 	}
 
+	log.Info("로그인에 성공하였습니다: %s", user.Name)
 	c.JSON(
 		http.StatusOK,
 		engine.Object{
@@ -94,6 +102,7 @@ func (h *SessionHandler) Logout(c *engine.Context) {
 	c.SessionClear()
 
 	if err := c.SessionSave(); err != nil {
+		log.Warn("로그아웃에 실패하였습니다: %v", err)
 		c.JSON(
 			http.StatusInternalServerError,
 			engine.Object{
@@ -103,6 +112,7 @@ func (h *SessionHandler) Logout(c *engine.Context) {
 		return
 	}
 
+	log.Info("로그아웃에 성공하였습니다")
 	c.JSON(
 		http.StatusOK,
 		engine.Object{
