@@ -82,5 +82,5 @@ func main() {
 		protectedRoutes.POST("/asset", assetHandler.Post)
 	}
 
-	router.Serve(":" + config.Server.Port)
+	router.Serve(config.Server.Port)
 }

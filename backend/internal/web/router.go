@@ -1,6 +1,8 @@
 package engine
 
 import (
+	"fmt"
+	"nekolog/internal/log"
 	"net/http"
 )
 
@@ -92,5 +94,20 @@ func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 }
 
 func (r *Router) Serve(addr string) error {
+	log.Info("Register routes")
+
+	for method, route := range r.routes {
+		for route_name, route_handler_chain := range route {
+			log.Info(
+				"%-10s %-30s → %d handlers",
+				fmt.Sprintf("[%s]", method),
+				route_name,
+				len(route_handler_chain),
+			)
+		}
+	}
+
+	log.Info("Server listening on %s", addr)
+
 	return http.ListenAndServe(addr, r)
 }
