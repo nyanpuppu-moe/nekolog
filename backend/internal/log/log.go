@@ -7,12 +7,12 @@ import (
 )
 
 const (
-	reset = "\033[0m"
+	colorReset = "\033[0m"
 
-	gray   = "\033[90m"
-	blue   = "\033[34m"
-	yellow = "\033[33m"
-	red    = "\033[31m"
+	colorGray   = "\033[90m"
+	colorBlue   = "\033[34m"
+	colorYellow = "\033[33m"
+	colorRed    = "\033[31m"
 )
 
 func output(level string, msg string, args ...any) {
@@ -26,17 +26,17 @@ func output(level string, msg string, args ...any) {
 }
 
 func Debug(msg string, args ...any) {
-	output(blue+"Debug"+reset, msg, args...)
+	output(colorBlue+"Debug"+colorReset, msg, args...)
 }
 
 func Info(msg string, args ...any) {
-	output(gray+"Info"+reset, msg, args...)
+	output(colorGray+"Info"+colorReset, msg, args...)
 }
 
 func Warn(msg string, args ...any) {
-	output(yellow+"Warn"+reset, msg, args...)
+	output(colorYellow+"Warn"+colorReset, msg, args...)
 }
 
 func Error(msg string, args ...any) {
-	output(red+"Error"+reset, msg, args...)
+	output(colorRed+"Error"+colorReset, msg, args...)
 }

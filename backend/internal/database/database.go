@@ -1,18 +1,18 @@
 package database
 
 import (
+	"nekolog/internal/log"
 	"os"
 	"path/filepath"
 
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 
 	"github.com/glebarez/sqlite"
 )
 
 func Connect(dbPath string) (*gorm.DB, error) {
 	config := &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
+		Logger: log.NewGormLogger(),
 	}
 
 	if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
