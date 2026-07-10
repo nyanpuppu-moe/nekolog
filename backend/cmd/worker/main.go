@@ -56,7 +56,7 @@ func main() {
 	)
 	assetHandler := handler.NewAssetHandler(assetService)
 
-	router := engine.NewRouter()
+	router := web.NewRouter()
 
 	apiRoutes := router.Group("/api")
 	{

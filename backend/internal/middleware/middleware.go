@@ -5,13 +5,13 @@ import (
 	"net/http"
 )
 
-func AuthRequired(c *engine.Context) {
+func AuthRequired(c *web.Context) {
 	userID := c.SessionGet("user_id")
 
 	if userID == nil {
 		c.JSON(
 			http.StatusUnauthorized,
-			engine.Object{
+			web.Object{
 				"error": "Faild auth, please account login",
 			},
 		)

@@ -56,7 +56,7 @@ func (s *ArticleService) Patch(userID model.UserID, title string, req dto.Articl
 		return err
 	}
 
-	updates := make(engine.Object)
+	updates := make(web.Object)
 	updates["content"] = req.Content
 
 	return s.articleRepo.Update(currentArticle.ID, updates)

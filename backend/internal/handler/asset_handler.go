@@ -22,13 +22,13 @@ func NewAssetHandler(assetService *service.AssetService) *AssetHandler {
 	}
 }
 
-func (h *AssetHandler) Get(c *engine.Context) {
+func (h *AssetHandler) Get(c *web.Context) {
 	id, err := utils.StringToUint[model.AssetID](c.Param("id"))
 	if err != nil {
 		log.Warn("올바르지 않은 아이디입니다: %d", id)
 		c.JSON(
 			http.StatusBadRequest,
-			engine.Object{
+			web.Object{
 				"error": "올바르지 않은 아이디입니다",
 			},
 		)
@@ -40,7 +40,7 @@ func (h *AssetHandler) Get(c *engine.Context) {
 		log.Warn("존재하지 않는 에셋입니다: %d", id)
 		c.JSON(
 			http.StatusNotFound,
-			engine.Object{
+			web.Object{
 				"error": "존재하지 않는 에셋입니다",
 			},
 		)
@@ -50,19 +50,19 @@ func (h *AssetHandler) Get(c *engine.Context) {
 	log.Info("에셋이 조회되었습니다: %d", id)
 	c.JSON(
 		http.StatusOK,
-		engine.Object{
+		web.Object{
 			"message": "에셋이 조회되었습니다",
 			"user":    asset,
 		},
 	)
 }
 
-func (h *AssetHandler) Post(c *engine.Context) {
+func (h *AssetHandler) Post(c *web.Context) {
 	sessionUserID := c.SessionGet("user_id")
 	if sessionUserID == nil {
 		c.JSON(
 			http.StatusUnauthorized,
-			engine.Object{
+			web.Object{
 				"error": "인증되지 않은 유저입니다",
 			},
 		)
@@ -73,7 +73,7 @@ func (h *AssetHandler) Post(c *engine.Context) {
 	if !ok {
 		c.JSON(
 			http.StatusUnauthorized,
-			engine.Object{
+			web.Object{
 				"error": "올바르지 않은 유저입니다",
 			},
 		)
@@ -84,7 +84,7 @@ func (h *AssetHandler) Post(c *engine.Context) {
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(
 			http.StatusBadRequest,
-			engine.Object{
+			web.Object{
 				"error": "올바르지 않은 요청입니다",
 			},
 		)
@@ -95,7 +95,7 @@ func (h *AssetHandler) Post(c *engine.Context) {
 	if err != nil {
 		c.JSON(
 			http.StatusBadRequest,
-			engine.Object{
+			web.Object{
 				"error": "파일이 존재하지 않습니다",
 			},
 		)
@@ -106,7 +106,7 @@ func (h *AssetHandler) Post(c *engine.Context) {
 	if err != nil {
 		c.JSON(
 			http.StatusInternalServerError,
-			engine.Object{
+			web.Object{
 				"error": "파일을 열 수 없습니다",
 			},
 		)
@@ -118,7 +118,7 @@ func (h *AssetHandler) Post(c *engine.Context) {
 	if err != nil {
 		c.JSON(
 			http.StatusInternalServerError,
-			engine.Object{
+			web.Object{
 				"error": "파일을 읽을 수 없습니다",
 			},
 		)
@@ -128,14 +128,14 @@ func (h *AssetHandler) Post(c *engine.Context) {
 	if err := h.assetService.Post(userID, data, req); err != nil {
 		c.JSON(
 			http.StatusInternalServerError,
-			engine.Object{
+			web.Object{
 				"error": err.Error(),
 			},
 		)
 		return
 	}
 
-	c.JSON(http.StatusCreated, engine.Object{
+	c.JSON(http.StatusCreated, web.Object{
 		"message": "파일이 생성되었습니다",
 	})
 }

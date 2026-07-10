@@ -51,7 +51,7 @@ func (r *ArticleRepository) FindByAuthorIDAndTitle(authorID model.UserID, title 
 	return &article, nil
 }
 
-func (r *ArticleRepository) Update(id model.ArticleID, updates engine.Object) error {
+func (r *ArticleRepository) Update(id model.ArticleID, updates web.Object) error {
 	return r.dataBase.
 		Model(&model.Article{}).
 		Where(&model.Article{

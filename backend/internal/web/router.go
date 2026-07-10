@@ -1,4 +1,4 @@
-package engine
+package web
 
 import (
 	"fmt"
@@ -99,7 +99,7 @@ func (r *Router) Serve(addr string) error {
 	for method, route := range r.routes {
 		for route_name, route_handler_chain := range route {
 			log.Info(
-				"%-10s %-30s → %d handlers",
+				"%-10s %-40s → %d handlers",
 				fmt.Sprintf("[%s]", method),
 				route_name,
 				len(route_handler_chain),

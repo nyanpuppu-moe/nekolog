@@ -25,7 +25,7 @@ func NewArticleHandler(
 	}
 }
 
-func (h *ArticleHandler) Get(c *engine.Context) {
+func (h *ArticleHandler) Get(c *web.Context) {
 	username := c.Param("username")
 	title := c.Param("title")
 
@@ -34,7 +34,7 @@ func (h *ArticleHandler) Get(c *engine.Context) {
 		log.Warn("존재하지 않는 아티클입니다: %s/%s", username, title)
 		c.JSON(
 			http.StatusNotFound,
-			engine.Object{
+			web.Object{
 				"error": "존재하지 않는 아티클입니다",
 			},
 		)
@@ -44,20 +44,20 @@ func (h *ArticleHandler) Get(c *engine.Context) {
 	log.Info("아티클이 조회되었습니다: %s/%s", username, title)
 	c.JSON(
 		http.StatusOK,
-		engine.Object{
+		web.Object{
 			"message": "아티클이 조회되었습니다",
 			"article": article,
 		},
 	)
 }
 
-func (h *ArticleHandler) Post(c *engine.Context) {
+func (h *ArticleHandler) Post(c *web.Context) {
 	sessionUserID := c.SessionGet("user_id")
 	if sessionUserID == nil {
 		log.Warn("인증되지 않은 유저입니다")
 		c.JSON(
 			http.StatusUnauthorized,
-			engine.Object{
+			web.Object{
 				"error": "인증되지 않은 유저입니다",
 			},
 		)
@@ -69,7 +69,7 @@ func (h *ArticleHandler) Post(c *engine.Context) {
 		log.Warn("올바르지 않은 유저입니다: %d", userID)
 		c.JSON(
 			http.StatusUnauthorized,
-			engine.Object{
+			web.Object{
 				"error": "올바르지 않은 유저입니다",
 			},
 		)
@@ -81,7 +81,7 @@ func (h *ArticleHandler) Post(c *engine.Context) {
 		log.Warn("올바르지 않은 유저입니다: %s", user.Name)
 		c.JSON(
 			http.StatusUnauthorized,
-			engine.Object{
+			web.Object{
 				"error": "올바르지 않은 유저입니다",
 			},
 		)
@@ -93,7 +93,7 @@ func (h *ArticleHandler) Post(c *engine.Context) {
 		log.Warn("올바르지 않은 요청입니다: %v", err)
 		c.JSON(
 			http.StatusBadRequest,
-			engine.Object{
+			web.Object{
 				"error": "올바르지 않은 요청입니다",
 			},
 		)
@@ -104,7 +104,7 @@ func (h *ArticleHandler) Post(c *engine.Context) {
 		log.Warn("아티클 생성에 실패하였습니다: %v", err)
 		c.JSON(
 			http.StatusInternalServerError,
-			engine.Object{
+			web.Object{
 				"error": "아티클 생성에 실패하였습니다",
 			},
 		)
@@ -114,13 +114,13 @@ func (h *ArticleHandler) Post(c *engine.Context) {
 	log.Info("아티클이 생성되었습니다: %s/%s", user.Name, req.Title)
 	c.JSON(
 		http.StatusOK,
-		engine.Object{
+		web.Object{
 			"message": "아티클이 생성되었습니다",
 		},
 	)
 }
 
-func (h *ArticleHandler) Patch(c *engine.Context) {
+func (h *ArticleHandler) Patch(c *web.Context) {
 	username := c.Param("username")
 	title := c.Param("title")
 
@@ -129,7 +129,7 @@ func (h *ArticleHandler) Patch(c *engine.Context) {
 		log.Warn("인증되지 않은 유저입니다")
 		c.JSON(
 			http.StatusUnauthorized,
-			engine.Object{
+			web.Object{
 				"error": "인증되지 않은 유저입니다",
 			},
 		)
@@ -141,7 +141,7 @@ func (h *ArticleHandler) Patch(c *engine.Context) {
 		log.Warn("올바르지 않은 유저입니다: %d", userID)
 		c.JSON(
 			http.StatusUnauthorized,
-			engine.Object{
+			web.Object{
 				"error": "올바르지 않은 유저입니다",
 			},
 		)
@@ -153,7 +153,7 @@ func (h *ArticleHandler) Patch(c *engine.Context) {
 		log.Warn("올바르지 않은 유저입니다: %s", user.Name)
 		c.JSON(
 			http.StatusUnauthorized,
-			engine.Object{
+			web.Object{
 				"error": "올바르지 않은 유저입니다",
 			},
 		)
@@ -164,7 +164,7 @@ func (h *ArticleHandler) Patch(c *engine.Context) {
 		log.Warn("인증되지 않은 유저입니다 %v", username)
 		c.JSON(
 			http.StatusUnauthorized,
-			engine.Object{
+			web.Object{
 				"error": "인증되지 않은 유저입니다",
 			},
 		)
@@ -176,7 +176,7 @@ func (h *ArticleHandler) Patch(c *engine.Context) {
 		log.Warn("올바르지 않은 요청입니다: %v", err)
 		c.JSON(
 			http.StatusBadRequest,
-			engine.Object{
+			web.Object{
 				"error": "올바르지 않은 요청입니다",
 			},
 		)
@@ -187,7 +187,7 @@ func (h *ArticleHandler) Patch(c *engine.Context) {
 		log.Warn("아티클 수정에 실패하였습니다: %v", err)
 		c.JSON(
 			http.StatusInternalServerError,
-			engine.Object{
+			web.Object{
 				"error": "아티클 수정에 실패하였습니다",
 			},
 		)
@@ -197,13 +197,13 @@ func (h *ArticleHandler) Patch(c *engine.Context) {
 	log.Info("아티클이 수정되었습니다: %s/%s", username, title)
 	c.JSON(
 		http.StatusOK,
-		engine.Object{
+		web.Object{
 			"message": "아티클이 수정되었습니다",
 		},
 	)
 }
 
-func (h *ArticleHandler) Delete(c *engine.Context) {
+func (h *ArticleHandler) Delete(c *web.Context) {
 	username := c.Param("username")
 	title := c.Param("title")
 
@@ -212,7 +212,7 @@ func (h *ArticleHandler) Delete(c *engine.Context) {
 		log.Warn("인증되지 않은 유저입니다")
 		c.JSON(
 			http.StatusUnauthorized,
-			engine.Object{
+			web.Object{
 				"error": "인증되지 않은 유저입니다",
 			},
 		)
@@ -224,7 +224,7 @@ func (h *ArticleHandler) Delete(c *engine.Context) {
 		log.Warn("올바르지 않은 유저입니다: %d", userID)
 		c.JSON(
 			http.StatusUnauthorized,
-			engine.Object{
+			web.Object{
 				"error": "올바르지 않은 유저입니다",
 			},
 		)
@@ -236,7 +236,7 @@ func (h *ArticleHandler) Delete(c *engine.Context) {
 		log.Warn("올바르지 않은 유저입니다: %s", user.Name)
 		c.JSON(
 			http.StatusUnauthorized,
-			engine.Object{
+			web.Object{
 				"error": "올바르지 않은 유저입니다",
 			},
 		)
@@ -247,7 +247,7 @@ func (h *ArticleHandler) Delete(c *engine.Context) {
 		log.Warn("인증되지 않은 유저입니다 %v", username)
 		c.JSON(
 			http.StatusUnauthorized,
-			engine.Object{
+			web.Object{
 				"error": "인증되지 않은 유저입니다",
 			},
 		)
@@ -258,7 +258,7 @@ func (h *ArticleHandler) Delete(c *engine.Context) {
 		log.Warn("아티클 삭제에 실패하였습니다: %v", err)
 		c.JSON(
 			http.StatusInternalServerError,
-			engine.Object{
+			web.Object{
 				"error": "아티클 삭제에 실패하였습니다",
 			},
 		)
@@ -266,7 +266,7 @@ func (h *ArticleHandler) Delete(c *engine.Context) {
 	}
 
 	log.Info("아티클이 삭제되었습니다: %s/%s", username, title)
-	c.JSON(http.StatusOK, engine.Object{
+	c.JSON(http.StatusOK, web.Object{
 		"message": "아티클이 삭제되었습니다",
 	})
 }
