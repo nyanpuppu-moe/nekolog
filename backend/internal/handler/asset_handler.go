@@ -28,7 +28,7 @@ func (h *AssetHandler) Get(c *web.Context) {
 		log.Warn("올바르지 않은 아이디입니다: %d", id)
 		c.JSON(
 			http.StatusBadRequest,
-			web.Object{
+			utils.Object{
 				"error": "올바르지 않은 아이디입니다",
 			},
 		)
@@ -40,7 +40,7 @@ func (h *AssetHandler) Get(c *web.Context) {
 		log.Warn("존재하지 않는 에셋입니다: %d", id)
 		c.JSON(
 			http.StatusNotFound,
-			web.Object{
+			utils.Object{
 				"error": "존재하지 않는 에셋입니다",
 			},
 		)
@@ -50,7 +50,7 @@ func (h *AssetHandler) Get(c *web.Context) {
 	log.Info("에셋이 조회되었습니다: %d", id)
 	c.JSON(
 		http.StatusOK,
-		web.Object{
+		utils.Object{
 			"message": "에셋이 조회되었습니다",
 			"user":    asset,
 		},
@@ -62,7 +62,7 @@ func (h *AssetHandler) Post(c *web.Context) {
 	if sessionUserID == nil {
 		c.JSON(
 			http.StatusUnauthorized,
-			web.Object{
+			utils.Object{
 				"error": "인증되지 않은 유저입니다",
 			},
 		)
@@ -73,7 +73,7 @@ func (h *AssetHandler) Post(c *web.Context) {
 	if !ok {
 		c.JSON(
 			http.StatusUnauthorized,
-			web.Object{
+			utils.Object{
 				"error": "올바르지 않은 유저입니다",
 			},
 		)
@@ -84,7 +84,7 @@ func (h *AssetHandler) Post(c *web.Context) {
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(
 			http.StatusBadRequest,
-			web.Object{
+			utils.Object{
 				"error": "올바르지 않은 요청입니다",
 			},
 		)
@@ -95,7 +95,7 @@ func (h *AssetHandler) Post(c *web.Context) {
 	if err != nil {
 		c.JSON(
 			http.StatusBadRequest,
-			web.Object{
+			utils.Object{
 				"error": "파일이 존재하지 않습니다",
 			},
 		)
@@ -106,7 +106,7 @@ func (h *AssetHandler) Post(c *web.Context) {
 	if err != nil {
 		c.JSON(
 			http.StatusInternalServerError,
-			web.Object{
+			utils.Object{
 				"error": "파일을 열 수 없습니다",
 			},
 		)
@@ -118,7 +118,7 @@ func (h *AssetHandler) Post(c *web.Context) {
 	if err != nil {
 		c.JSON(
 			http.StatusInternalServerError,
-			web.Object{
+			utils.Object{
 				"error": "파일을 읽을 수 없습니다",
 			},
 		)
@@ -128,14 +128,14 @@ func (h *AssetHandler) Post(c *web.Context) {
 	if err := h.assetService.Post(userID, data, req); err != nil {
 		c.JSON(
 			http.StatusInternalServerError,
-			web.Object{
+			utils.Object{
 				"error": err.Error(),
 			},
 		)
 		return
 	}
 
-	c.JSON(http.StatusCreated, web.Object{
+	c.JSON(http.StatusCreated, utils.Object{
 		"message": "파일이 생성되었습니다",
 	})
 }

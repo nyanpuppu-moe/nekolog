@@ -3,7 +3,7 @@ package repository
 import (
 	"nekolog/internal/model"
 	"nekolog/internal/storage"
-	"nekolog/internal/web"
+	"nekolog/internal/utils"
 
 	"gorm.io/gorm"
 )
@@ -51,7 +51,7 @@ func (r *ArticleRepository) FindByAuthorIDAndTitle(authorID model.UserID, title 
 	return &article, nil
 }
 
-func (r *ArticleRepository) Update(id model.ArticleID, updates web.Object) error {
+func (r *ArticleRepository) Update(id model.ArticleID, updates utils.Object) error {
 	return r.dataBase.
 		Model(&model.Article{}).
 		Where(&model.Article{

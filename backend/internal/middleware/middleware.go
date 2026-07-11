@@ -1,8 +1,10 @@
 package middleware
 
 import (
-	"nekolog/internal/web"
 	"net/http"
+
+	"nekolog/internal/utils"
+	"nekolog/internal/web"
 )
 
 func AuthRequired(c *web.Context) {
@@ -11,7 +13,7 @@ func AuthRequired(c *web.Context) {
 	if userID == nil {
 		c.JSON(
 			http.StatusUnauthorized,
-			web.Object{
+			utils.Object{
 				"error": "Faild auth, please account login",
 			},
 		)

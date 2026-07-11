@@ -70,14 +70,14 @@ func main() {
 		apiRoutes.GET("/assets/:id", assetHandler.Get)
 	}
 
-	authRoutes := router.Group("/api/auth")
+	authRoutes := apiRoutes.Group("/auth")
 	{
 		authRoutes.POST("/register", sessionHandler.Register)
 		authRoutes.POST("/login", sessionHandler.Login)
 		authRoutes.POST("/logout", sessionHandler.Logout)
 	}
 
-	protectedRoutes := router.Group("/api/protected")
+	protectedRoutes := apiRoutes.Group("/protected")
 	protectedRoutes.Use(middleware.AuthRequired)
 	{
 		protectedRoutes.POST("/article", articleHandler.Post)

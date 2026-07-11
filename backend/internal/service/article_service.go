@@ -2,10 +2,11 @@ package service
 
 import (
 	"errors"
+
 	"nekolog/internal/dto"
 	"nekolog/internal/model"
 	"nekolog/internal/repository"
-	"nekolog/internal/web"
+	"nekolog/internal/utils"
 )
 
 type ArticleService struct {
@@ -56,7 +57,7 @@ func (s *ArticleService) Patch(userID model.UserID, title string, req dto.Articl
 		return err
 	}
 
-	updates := make(web.Object)
+	updates := make(utils.Object)
 	updates["content"] = req.Content
 
 	return s.articleRepo.Update(currentArticle.ID, updates)

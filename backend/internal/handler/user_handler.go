@@ -5,6 +5,7 @@ import (
 
 	"nekolog/internal/log"
 	"nekolog/internal/service"
+	"nekolog/internal/utils"
 	"nekolog/internal/web"
 )
 
@@ -24,7 +25,7 @@ func (h *UserHandler) Get(c *web.Context) {
 		log.Warn("존재하지 않는 사용자입니다: %s", name)
 		c.JSON(
 			http.StatusNotFound,
-			web.Object{
+			utils.Object{
 				"error": "존재하지 않는 사용자입니다",
 			},
 		)
@@ -34,7 +35,7 @@ func (h *UserHandler) Get(c *web.Context) {
 	log.Info("사용자를 조회하였습니다: %s", name)
 	c.JSON(
 		http.StatusOK,
-		web.Object{
+		utils.Object{
 			"message": "사용자를 조회하였습니다",
 			"user":    user,
 		},

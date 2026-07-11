@@ -26,5 +26,3 @@ func (c *Context) Next() {
 func (c *Context) Abort() {
 	c.index = len(c.handlers)
 }
-
-type Object map[string]any

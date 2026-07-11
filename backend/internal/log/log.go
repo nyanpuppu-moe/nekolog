@@ -16,10 +16,13 @@ const (
 )
 
 func output(level string, msg string, args ...any) {
+	now := time.Now()
+
 	fmt.Fprintf(
 		os.Stdout,
-		"[%s] [%s] %s\n",
-		time.Now().Format("15:04:05"),
+		"[%s %s] [%s] %s\n",
+		now.Format("2006-01-02"),
+		now.Format("15:04:05"),
 		level,
 		fmt.Sprintf(msg, args...),
 	)

@@ -6,6 +6,7 @@ import (
 	"nekolog/internal/dto"
 	"nekolog/internal/log"
 	"nekolog/internal/service"
+	"nekolog/internal/utils"
 	"nekolog/internal/web"
 )
 
@@ -23,7 +24,7 @@ func (h *SessionHandler) Register(c *web.Context) {
 		log.Warn("올바르지 않은 요청입니다: %v", err)
 		c.JSON(
 			http.StatusBadRequest,
-			web.Object{
+			utils.Object{
 				"error": "올바르지 않은 요청입니다",
 			},
 		)
@@ -35,7 +36,7 @@ func (h *SessionHandler) Register(c *web.Context) {
 		log.Warn("사용자 등록에 실패하였습니다: %v", err)
 		c.JSON(
 			http.StatusConflict,
-			web.Object{
+			utils.Object{
 				"error": "사용자 등록에 실패하였습니다",
 			},
 		)
@@ -45,7 +46,7 @@ func (h *SessionHandler) Register(c *web.Context) {
 	log.Info("사용자를 등록하였습니다: %s", req.Name)
 	c.JSON(
 		http.StatusCreated,
-		web.Object{
+		utils.Object{
 			"message": "사용자를 등록하였습니다",
 		},
 	)
@@ -57,7 +58,7 @@ func (h *SessionHandler) Login(c *web.Context) {
 		log.Warn("올바르지 않은 요청입니다: %v", err)
 		c.JSON(
 			http.StatusBadRequest,
-			web.Object{
+			utils.Object{
 				"error": "올바르지 않은 요청입니다",
 			},
 		)
@@ -69,7 +70,7 @@ func (h *SessionHandler) Login(c *web.Context) {
 		log.Warn("사용자 이름 또는 비밀번호가 올바르지 않습니다")
 		c.JSON(
 			http.StatusUnauthorized,
-			web.Object{
+			utils.Object{
 				"error": "사용자 이름 또는 비밀번호가 올바르지 않습니다",
 			},
 		)
@@ -81,7 +82,7 @@ func (h *SessionHandler) Login(c *web.Context) {
 		log.Warn("세션을 저장하지 못했습니다: %v", err)
 		c.JSON(
 			http.StatusInternalServerError,
-			web.Object{
+			utils.Object{
 				"error": "세션을 저장하지 못했습니다",
 			},
 		)
@@ -91,7 +92,7 @@ func (h *SessionHandler) Login(c *web.Context) {
 	log.Info("로그인에 성공하였습니다: %s", user.Name)
 	c.JSON(
 		http.StatusOK,
-		web.Object{
+		utils.Object{
 			"message": "로그인에 성공하였습니다",
 			"user":    user,
 		},
@@ -105,7 +106,7 @@ func (h *SessionHandler) Logout(c *web.Context) {
 		log.Warn("로그아웃에 실패하였습니다: %v", err)
 		c.JSON(
 			http.StatusInternalServerError,
-			web.Object{
+			utils.Object{
 				"error": "로그아웃에 실패하였습니다",
 			},
 		)
@@ -115,7 +116,7 @@ func (h *SessionHandler) Logout(c *web.Context) {
 	log.Info("로그아웃에 성공하였습니다")
 	c.JSON(
 		http.StatusOK,
-		web.Object{
+		utils.Object{
 			"message": "로그아웃에 성공하였습니다",
 		},
 	)
