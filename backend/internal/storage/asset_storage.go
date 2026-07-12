@@ -25,7 +25,8 @@ func (s *AssetStorage) Create(authorID model.UserID, assetID model.AssetID, data
 		utils.ToString(assetID),
 	)
 
-	if err := os.MkdirAll(filepath.Dir(fullPath), 0755); err != nil {
+	err := os.MkdirAll(filepath.Dir(fullPath), 0755)
+	if err != nil {
 		return err
 	}
 

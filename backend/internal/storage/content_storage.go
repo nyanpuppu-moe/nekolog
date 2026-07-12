@@ -25,7 +25,8 @@ func (s *ContentStorage) Create(authorID model.UserID, title string, content str
 		title,
 	)
 
-	if err := os.MkdirAll(filepath.Dir(fullPath), 0755); err != nil {
+	err := os.MkdirAll(filepath.Dir(fullPath), 0755)
+	if err != nil {
 		return err
 	}
 

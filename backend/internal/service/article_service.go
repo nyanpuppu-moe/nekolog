@@ -34,8 +34,8 @@ func (s *ArticleService) Get(username string, title string) (*model.Article, err
 }
 
 func (s *ArticleService) Post(userID model.UserID, req dto.ArticlePostRequest) error {
-	_, err := s.articleRepo.FindByAuthorIDAndTitle(userID, req.Title)
-	if err == nil {
+	article, _ := s.articleRepo.FindByAuthorIDAndTitle(userID, req.Title)
+	if article != nil {
 		return errors.New("Already same title article")
 	}
 
@@ -44,7 +44,8 @@ func (s *ArticleService) Post(userID model.UserID, req dto.ArticlePostRequest) e
 		Title:    req.Title,
 	}
 
-	if err := s.articleRepo.Create(newArticle, req.Content); err != nil {
+	err := s.articleRepo.Create(newArticle, req.Content)
+	if err != nil {
 		return err
 	}
 

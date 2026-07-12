@@ -21,7 +21,8 @@ func Load() (*Config, error) {
 		return nil, fmt.Errorf("failed to read config file: %w", err)
 	}
 
-	if err := yaml.Unmarshal(file, &cfg); err != nil {
+	err = yaml.Unmarshal(file, &cfg)
+	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal yaml: %w", err)
 	}
 

@@ -125,7 +125,8 @@ func (h *AssetHandler) Post(c *web.Context) {
 		return
 	}
 
-	if err := h.assetService.Post(userID, data, req); err != nil {
+	err = h.assetService.Post(userID, data, req)
+	if err != nil {
 		c.JSON(
 			http.StatusInternalServerError,
 			utils.Object{

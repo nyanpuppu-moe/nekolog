@@ -100,8 +100,8 @@ func (h *ArticleHandler) Post(c *web.Context) {
 		)
 		return
 	}
-
-	if err := h.articleService.Post(userID, req); err != nil {
+	err = h.articleService.Post(userID, req)
+	if err != nil {
 		log.Warn("아티클 생성에 실패하였습니다: %v", err)
 		c.JSON(
 			http.StatusInternalServerError,

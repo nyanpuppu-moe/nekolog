@@ -24,7 +24,8 @@ func NewArticleRepository(
 }
 
 func (r *ArticleRepository) Create(article *model.Article, content string) error {
-	if err := r.contentStorage.Create(article.AuthorID, article.Title, content); err != nil {
+	err := r.contentStorage.Create(article.AuthorID, article.Title, content)
+	if err != nil {
 		return err
 	}
 
@@ -62,7 +63,8 @@ func (r *ArticleRepository) Update(id model.ArticleID, updates utils.Object) err
 }
 
 func (r *ArticleRepository) Delete(authorID model.UserID, title string) error {
-	if err := r.contentStorage.Delete(authorID, title); err != nil {
+	err := r.contentStorage.Delete(authorID, title)
+	if err != nil {
 		return err
 	}
 
