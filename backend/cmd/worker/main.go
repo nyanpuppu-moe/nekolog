@@ -14,23 +14,17 @@ import (
 )
 
 func main() {
-	// 사용자의 설정을 불러옵니다
-	// configs/config.yaml 을 불러옵니다
 	config, err := config.Load()
 	if err != nil {
 		log.Error("Faild to load config: %v", err)
 		return
 	}
 
-	// DataBase 에 연결을 시도합니다
-	// config.Database.Path 에서 db 파일을 찾습니다
 	db, err := database.Connect(config.Database.Path)
 	if err != nil {
 		log.Error("Faild to can not connect sqlite: %v", err)
 	}
 
-	// DataBase 를 자동으로 마이그레이션 합니다
-	// 서비스를 시작할떄마다 항상 마이그레이션 합니다
 	err = db.AutoMigrate(&model.User{})
 	if err != nil {
 		log.Error("Faild to sqlite migration: %v", err)
