@@ -14,6 +14,46 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. js-lingui-explicit-id
+#: src/components/CodeCopyButton.astro
+msgid "code_copy_label_copied"
+msgstr "Code copied"
+
+#. js-lingui-explicit-id
+#: src/components/CodeCopyButton.astro
+msgid "code_copy_label_failed"
+msgstr "Code copy failed"
+
+#. js-lingui-explicit-id
 #: src/components/AriaI18n.astro
 msgid "code_snippet_scroll_area"
 msgstr "Code snippet scroll area"
+
+#. js-lingui-explicit-id
+#: src/components/CodeCopyButton.astro
+msgid "code_copy_copied"
+msgstr "Copied"
+
+#. js-lingui-explicit-id
+#: src/components/CodeCopyButton.astro
+msgid "code_copy_copy"
+msgstr "Copy"
+
+#. js-lingui-explicit-id
+#: src/components/CodeCopyButton.astro
+msgid "code_copy_label_copy"
+msgstr "Copy code"
+
+#. js-lingui-explicit-id
+#: src/components/CodeCopyButton.astro
+msgid "code_copy_failed"
+msgstr "Failed"
+
+#. js-lingui-explicit-id
+#: src/components/CodeCopyButton.astro
+msgid "code_copy_sr_failed"
+msgstr "Failed to copy the code."
+
+#. js-lingui-explicit-id
+#: src/components/CodeCopyButton.astro
+msgid "code_copy_sr_copied"
+msgstr "The code has been copied to the clipboard."
